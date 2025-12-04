@@ -200,6 +200,29 @@ public interface ProductionDataMapper {
     Map<String, Object> getMonthProductionStatistics();
     
     /**
+     * 获取生产线产量统计
+     * @param productionLineId 生产线ID
+     * @param dataType 数据类型
+     * @return 生产线产量统计
+     */
+    Map<String, Object> getProductionLineStatistics(Integer productionLineId, String dataType);
+    
+    /**
+     * 获取设备产量统计
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @return 设备产量统计
+     */
+    Map<String, Object> getEquipmentStatistics(Integer equipmentId, String dataType);
+    
+    /**
+     * 获取工单完成率统计
+     * @param workOrderId 工单ID
+     * @return 工单完成率统计
+     */
+    Map<String, Object> getWorkOrderCompletionRate(Integer workOrderId);
+    
+    /**
      * 获取年度生产统计
      * @return 年度生产统计
      */
@@ -208,12 +231,12 @@ public interface ProductionDataMapper {
     /**
      * 导出生产数据
      * @param params 查询参数
-     * @return 导出数据
+     * @return 导出数据列表
      */
     List<Map<String, Object>> exportProductionData(Map<String, Object> params);
     
     /**
-     * 根据数据类型和产品统计生产数据
+     * 根据数据类型和产品统计产量
      * @param dataType 数据类型
      * @param productId 产品ID
      * @return 统计结果
@@ -221,16 +244,16 @@ public interface ProductionDataMapper {
     Map<String, Object> countProductionByDataTypeAndProduct(String dataType, Integer productId);
     
     /**
-     * 根据数据类型统计各产品生产数据
+     * 根据数据类型统计各产品产量
      * @param dataType 数据类型
-     * @return 产品生产数据统计列表
+     * @return 产品产量统计列表
      */
     List<Map<String, Object>> countProductionByProduct(String dataType);
     
     /**
-     * 根据数据类型统计各设备生产数据
+     * 根据数据类型统计各设备产量
      * @param dataType 数据类型
-     * @return 设备生产数据统计列表
+     * @return 设备产量统计列表
      */
     List<Map<String, Object>> countProductionByEquipment(String dataType);
     
@@ -281,14 +304,6 @@ public interface ProductionDataMapper {
      * @return 生产数据列表
      */
     List<ProductionData> selectByEquipmentId(Long equipmentId);
-    
-    /**
-     * 获取设备统计信息
-     * @param equipmentId 设备ID
-     * @param dataType 数据类型
-     * @return 统计结果
-     */
-    Map<String, Object> getEquipmentStatistics(Integer equipmentId, String dataType);
     
     /**
      * 根据生产线ID查询生产数据

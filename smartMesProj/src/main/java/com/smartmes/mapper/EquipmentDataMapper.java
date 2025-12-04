@@ -55,6 +55,20 @@ public interface EquipmentDataMapper {
     List<EquipmentData> selectByWorkStationId(Long workStationId);
     
     /**
+     * 根据责任人ID查询设备数据
+     * @param responsiblePersonId 责任人ID
+     * @return 设备数据列表
+     */
+    List<EquipmentData> selectByResponsiblePersonId(Integer responsiblePersonId);
+    
+    /**
+     * 根据设备状态查询设备数据
+     * @param equipmentStatus 设备状态
+     * @return 设备数据列表
+     */
+    List<EquipmentData> selectByEquipmentStatus(String equipmentStatus);
+    
+    /**
      * 根据时间范围查询设备数据
      * @param startTime 开始时间
      * @param endTime 结束时间
@@ -142,6 +156,21 @@ public interface EquipmentDataMapper {
     Map<String, Object> countEquipmentByDataTypeAndEquipment(String dataType, Long equipmentId);
     
     /**
+     * 根据数据类型和设备统计设备数据
+     * @param dataType 数据类型
+     * @param equipmentId 设备ID
+     * @return 统计结果
+     */
+    Map<String, Object> countEquipmentDataByDataTypeAndEquipment(String dataType, Long equipmentId);
+    
+    /**
+     * 根据数据类型统计各设备运行数据
+     * @param dataType 数据类型
+     * @return 设备运行统计列表
+     */
+    List<Map<String, Object>> countEquipmentDataByEquipment(String dataType);
+    
+    /**
      * 根据数据类型统计各设备类型数据
      * @param dataType 数据类型
      * @return 设备类型统计列表
@@ -149,11 +178,99 @@ public interface EquipmentDataMapper {
     List<Map<String, Object>> countEquipmentByEquipmentType(String dataType);
     
     /**
+     * 根据数据类型统计各设备类型运行数据
+     * @param dataType 数据类型
+     * @return 设备类型运行统计列表
+     */
+    List<Map<String, Object>> countEquipmentDataByEquipmentType(String dataType);
+    
+    /**
      * 根据数据类型统计各生产线设备数据
      * @param dataType 数据类型
      * @return 生产线设备统计列表
      */
     List<Map<String, Object>> countEquipmentByProductionLine(String dataType);
+    
+    /**
+     * 根据数据类型统计各生产线设备运行数据
+     * @param dataType 数据类型
+     * @return 生产线设备运行统计列表
+     */
+    List<Map<String, Object>> countEquipmentDataByProductionLine(String dataType);
+    
+    /**
+     * 获取设备利用率统计
+     * @param dataType 数据类型
+     * @return 设备利用率统计
+     */
+    Map<String, Object> getEquipmentUtilizationStatistics(String dataType);
+    
+    /**
+     * 获取设备OEE统计
+     * @param dataType 数据类型
+     * @return 设备OEE统计
+     */
+    Map<String, Object> getEquipmentOEEStatistics(String dataType);
+    
+    /**
+     * 获取设备故障率统计
+     * @param dataType 数据类型
+     * @return 设备故障率统计
+     */
+    Map<String, Object> getEquipmentFailureRateStatistics(String dataType);
+    
+    /**
+     * 获取设备运行时间统计
+     * @param dataType 数据类型
+     * @return 设备运行时间统计
+     */
+    Map<String, Object> getEquipmentRunningTimeStatistics(String dataType);
+    
+    /**
+     * 获取设备停机时间统计
+     * @param dataType 数据类型
+     * @return 设备停机时间统计
+     */
+    Map<String, Object> getEquipmentDowntimeStatistics(String dataType);
+    
+    /**
+     * 获取设备维修次数统计
+     * @param dataType 数据类型
+     * @return 设备维修次数统计
+     */
+    Map<String, Object> getEquipmentMaintenanceCountStatistics(String dataType);
+    
+    /**
+     * 获取设备利用率趋势分析
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备利用率趋势分析
+     */
+    List<Map<String, Object>> getEquipmentUtilizationTrend(String dataType, Integer limit);
+    
+    /**
+     * 获取设备OEE趋势分析
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备OEE趋势分析
+     */
+    List<Map<String, Object>> getEquipmentOEETrend(String dataType, Integer limit);
+    
+    /**
+     * 获取设备故障率趋势分析
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备故障率趋势分析
+     */
+    List<Map<String, Object>> getEquipmentFailureRateTrend(String dataType, Integer limit);
+    
+    /**
+     * 获取设备运行时间趋势分析
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备运行时间趋势分析
+     */
+    List<Map<String, Object>> getEquipmentRunningTimeTrend(String dataType, Integer limit);
     
     /**
      * 根据数据类型统计设备利用率

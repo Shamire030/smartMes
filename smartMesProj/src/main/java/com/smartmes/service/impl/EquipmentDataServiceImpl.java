@@ -6,7 +6,7 @@ import com.smartmes.service.EquipmentDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -48,11 +48,11 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     
     @Override
     public List<EquipmentData> selectByWorkStationId(Integer workStationId) {
-        return equipmentDataMapper.selectByWorkStationId(workStationId);
+        return equipmentDataMapper.selectByWorkStationId(workStationId.longValue());
     }
     
     @Override
-    public List<EquipmentData> selectByResponsiblePersonId(Long responsiblePersonId) {
+    public List<EquipmentData> selectByResponsiblePersonId(Integer responsiblePersonId) {
         return equipmentDataMapper.selectByResponsiblePersonId(responsiblePersonId);
     }
     
@@ -80,8 +80,11 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     public Map<String, Object> selectPage(Integer page, Integer limit) {
         int start = (page - 1) * limit;
         List<EquipmentData> list = equipmentDataMapper.selectPage(start, limit);
-        int total = equipmentDataMapper.count();
-        return Map.of("list", list, "total", total);
+        int total = equipmentDataMapper.selectCount();
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", list);
+        result.put("total", total);
+        return result;
     }
     
     @Override
@@ -303,6 +306,11 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     @Override
     public Map<String, Object> getAverageFailureCount(String dataType) {
         return equipmentDataMapper.getAverageFailureCount(dataType);
+    }
+
+    @Override
+    public Map<String, Object> getAverageRepairTime(String dataType) {
+        return equipmentDataMapper.getAverageRepairTime(dataType);
     }
 
     @Override

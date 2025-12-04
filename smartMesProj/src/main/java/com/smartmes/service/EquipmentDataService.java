@@ -57,7 +57,7 @@ public interface EquipmentDataService {
      * @param responsiblePersonId 责任人ID
      * @return 设备数据列表
      */
-    List<EquipmentData> selectByResponsiblePersonId(Long responsiblePersonId);
+    List<EquipmentData> selectByResponsiblePersonId(Integer responsiblePersonId);
     
     /**
      * 根据设备状态查询设备数据

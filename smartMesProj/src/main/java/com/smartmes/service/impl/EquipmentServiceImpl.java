@@ -98,8 +98,8 @@ public class EquipmentServiceImpl implements EquipmentService {
         if (equipment.getOnlineStatus() == null) {
             equipment.setOnlineStatus(0); // 0: 离线
         }
-        if (equipment.getRuntime() == null) {
-            equipment.setRuntime(0);
+        if (equipment.getTotalRunningHours() == null) {
+            equipment.setTotalRunningHours(0.0);
         }
         return equipmentMapper.insert(equipment);
     }

@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class EquipmentData {
     private Integer id;                      // 主键ID
+    private String dataNo;                   // 数据编号
     private String dataType;                 // 数据类型：日/周/月/季度/年统计
     private String period;                   // 统计周期标识
     private Integer equipmentId;             // 设备ID
@@ -39,6 +40,8 @@ public class EquipmentData {
     // Getter and Setter methods
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
+    public String getDataNo() { return dataNo; }
+    public void setDataNo(String dataNo) { this.dataNo = dataNo; }
     public String getDataType() { return dataType; }
     public void setDataType(String dataType) { this.dataType = dataType; }
     public String getPeriod() { return period; }
