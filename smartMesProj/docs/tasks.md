@@ -8,30 +8,70 @@
 - **成员**：2人
 - **职责**：前端项目搭建、核心页面开发、路由配置、UI组件库集成、权限管理
 - **对应角色**：企业管理者、车间主任、生产计划员
+- **负责模块**：前端应用框架、路由系统、权限管理模块、通用组件库
+- **相关代码文件**：
+  - 前端框架配置文件（Vue 3 + Vite + Element Plus）
+  - 路由配置文件（router/index.js）
+  - 权限管理模块（utils/auth.js）
+  - 通用组件库（components/）
+  - 核心页面（views/）
 
 #### 第二组：生产计划服务开发
 - **成员**：2人
 - **职责**：生产计划前后端功能开发、排产算法实现、ERP集成接口
 - **对应微服务**：生产计划服务
 - **对应角色**：生产计划员
+- **负责模块**：生产计划管理、ERP集成接口、排产算法
+- **相关代码文件**：
+  - 实体类：`/model/ProductionPlan.java`
+  - 数据访问层：`/repository/ProductionPlanRepository.java`
+  - 服务层：`service/ProductionPlanService.java` 和 `impl/ProductionPlanServiceImpl.java`
+  - 控制层：`controller/ProductionPlanController.java`
 
 #### 第三组：生产执行服务开发
 - **成员**：2人
 - **职责**：生产执行前后端功能开发、数据采集接口、实时数据处理、异常上报与通知
 - **对应微服务**：生产执行服务
 - **对应角色**：生产操作员、车间主任
+- **负责模块**：生产执行管理、扫码开工、数据采集、异常处理
+- **相关代码文件**：
+  - 实体类：`model/ProductionExecution.java`
+  - 数据访问层：`mapper/ProductionExecutionMapper.java`
+  - 服务层：`service/ProductionExecutionService.java` 和 `service/impl/ProductionExecutionServiceImpl.java`
+  - 控制层：`controller/ProductionExecutionController.java`
 
 #### 第四组：质量管理与设备管理服务开发
 - **成员**：2人
 - **职责**：质量管理前后端功能开发、设备状态监控功能开发
 - **对应微服务**：质量管理服务、设备管理服务
 - **对应角色**：质检员、设备管理员
+- **负责模块**：质量管理（IQC/IPQC/FQC）、设备管理、设备状态监控
+- **相关代码文件**：
+  - 质量模块：
+    - 实体类：`model/QualityInspection.java`、`model/QualityData.java`
+    - 数据访问层：`mapper/QualityInspectionMapper.java`、`mapper/QualityDataMapper.java`
+    - 服务层：`service/QualityInspectionService.java`、`service/QualityDataService.java`
+    - 控制层：`controller/QualityInspectionController.java`、`controller/QualityDataController.java`
+  - 设备模块：
+    - 实体类：`model/Equipment.java`、`model/EquipmentData.java`、`model/EquipmentMaintenance.java`
+    - 数据访问层：`mapper/EquipmentMapper.java`、`mapper/EquipmentDataMapper.java`
+    - 服务层：`service/EquipmentService.java`、`service/EquipmentDataService.java`
+    - 控制层：`controller/EquipmentController.java`、`controller/EquipmentDataController.java`
 
 #### 第五组：数据分析服务与系统集成
 - **成员**：2人
 - **职责**：总览看板开发、趋势分析图表开发、系统性能优化、数据库优化、集成测试
 - **对应微服务**：数据分析服务
 - **对应角色**：企业管理者、质量管理人员
+- **负责模块**：数据分析服务、总览看板、趋势分析、系统集成、性能优化
+- **相关代码文件**：
+  - 数据模型：`model/ProductionData.java`
+  - 数据访问层：`mapper/ProductionDataMapper.java`
+  - 服务层：`service/ProductionDataService.java` 和 `service/impl/ProductionDataServiceImpl.java`
+  - 控制层：`controller/ProductionDataController.java`
+  - 系统配置：`resources/application.yml`
+  - 通用组件：`common/`
+  - 全局异常处理：`config/GlobalExceptionHandler.java`
 
 ### 1.2 成员具体分工明细
 
