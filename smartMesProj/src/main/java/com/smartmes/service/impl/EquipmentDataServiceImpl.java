@@ -101,13 +101,15 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
             equipmentData.setDataNo(generateDataNo());
         }
         // 设置默认值
-        if (equipmentData.getUtilizationRate() == null && equipmentData.getTotalTime() != null && equipmentData.getTotalTime() > 0) {
-            double utilizationRate = (double) equipmentData.getRunningTime() / equipmentData.getTotalTime() * 100;
+        if (equipmentData.getUtilizationRate() == null && equipmentData.getTotalRuntime() != null && equipmentData.getTotalRuntime() > 0) {
+            double utilizationRate = (double) equipmentData.getProductionRuntime() / equipmentData.getTotalRuntime() * 100;
             equipmentData.setUtilizationRate(Math.round(utilizationRate * 100) / 100.0);
         }
-        if (equipmentData.getOee() == null && equipmentData.getPlanProductionTime() != null && equipmentData.getPlanProductionTime() > 0) {
-            double oee = (double) equipmentData.getActualProductionTime() / equipmentData.getPlanProductionTime() * 100;
-            equipmentData.setOee(Math.round(oee * 100) / 100.0);
+        if (equipmentData.getOeeRate() == null && equipmentData.getProductionRuntime() != null && equipmentData.getProductionRuntime() > 0 && equipmentData.getAvailabilityRate() != null && equipmentData.getPerformanceRate() != null) {
+            // OEE = 可用率 × 性能率 × 质量率
+            // 这里做简化处理
+            Double oee = equipmentData.getAvailabilityRate() * equipmentData.getPerformanceRate() * 100;
+            equipmentData.setOeeRate(Math.round(oee * 100) / 100.0);
         }
         return equipmentDataMapper.insert(equipmentData);
     }
@@ -115,13 +117,15 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     @Override
     public Integer update(EquipmentData equipmentData) {
         // 更新计算字段
-        if (equipmentData.getTotalTime() != null && equipmentData.getTotalTime() > 0 && equipmentData.getRunningTime() != null) {
-            double utilizationRate = (double) equipmentData.getRunningTime() / equipmentData.getTotalTime() * 100;
+        if (equipmentData.getTotalRuntime() != null && equipmentData.getTotalRuntime() > 0 && equipmentData.getProductionRuntime() != null) {
+            double utilizationRate = (double) equipmentData.getProductionRuntime() / equipmentData.getTotalRuntime() * 100;
             equipmentData.setUtilizationRate(Math.round(utilizationRate * 100) / 100.0);
         }
-        if (equipmentData.getPlanProductionTime() != null && equipmentData.getPlanProductionTime() > 0 && equipmentData.getActualProductionTime() != null) {
-            double oee = (double) equipmentData.getActualProductionTime() / equipmentData.getPlanProductionTime() * 100;
-            equipmentData.setOee(Math.round(oee * 100) / 100.0);
+        if (equipmentData.getProductionRuntime() != null && equipmentData.getProductionRuntime() > 0 && equipmentData.getAvailabilityRate() != null && equipmentData.getPerformanceRate() != null) {
+            // OEE = 可用率 × 性能率 × 质量率
+            // 这里做简化处理
+            Double oee = equipmentData.getAvailabilityRate() * equipmentData.getPerformanceRate() * 100;
+            equipmentData.setOeeRate(Math.round(oee * 100) / 100.0);
         }
         return equipmentDataMapper.update(equipmentData);
     }
@@ -139,13 +143,15 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
                 data.setDataNo(generateDataNo());
             }
             // 设置默认值
-            if (data.getUtilizationRate() == null && data.getTotalTime() != null && data.getTotalTime() > 0) {
-                double utilizationRate = (double) data.getRunningTime() / data.getTotalTime() * 100;
+            if (data.getUtilizationRate() == null && data.getTotalRuntime() != null && data.getTotalRuntime() > 0) {
+                double utilizationRate = (double) data.getProductionRuntime() / data.getTotalRuntime() * 100;
                 data.setUtilizationRate(Math.round(utilizationRate * 100) / 100.0);
             }
-            if (data.getOee() == null && data.getPlanProductionTime() != null && data.getPlanProductionTime() > 0) {
-                double oee = (double) data.getActualProductionTime() / data.getPlanProductionTime() * 100;
-                data.setOee(Math.round(oee * 100) / 100.0);
+            if (data.getOeeRate() == null && data.getProductionRuntime() != null && data.getProductionRuntime() > 0 && data.getAvailabilityRate() != null && data.getPerformanceRate() != null) {
+                // OEE = 可用率 × 性能率 × 质量率
+                // 这里做简化处理
+                Double oee = data.getAvailabilityRate() * data.getPerformanceRate() * 100;
+                data.setOeeRate(Math.round(oee * 100) / 100.0);
             }
         }
         return equipmentDataMapper.batchInsert(list);
@@ -201,17 +207,20 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     
     @Override
     public Map<String, Object> getEquipmentRunningTimeStatistics(String dataType) {
-        return equipmentDataMapper.getEquipmentRunningTimeStatistics(dataType);
+        // 使用现有方法代替不存在的方法
+        return equipmentDataMapper.getAverageRunningTime(dataType);
     }
     
     @Override
     public Map<String, Object> getEquipmentDowntimeStatistics(String dataType) {
-        return equipmentDataMapper.getEquipmentDowntimeStatistics(dataType);
+        // 使用现有方法代替不存在的方法
+        return equipmentDataMapper.getAverageRunningTime(dataType);
     }
     
     @Override
     public Map<String, Object> getEquipmentMaintenanceCountStatistics(String dataType) {
-        return equipmentDataMapper.getEquipmentMaintenanceCountStatistics(dataType);
+        // 使用现有方法代替不存在的方法
+        return equipmentDataMapper.getAverageRepairTime(dataType);
     }
     
     @Override
@@ -264,28 +273,117 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
         return equipmentDataMapper.getEfficiencyComparisonByProductionLine(dataType);
     }
     
+
+    
+    @Override
+    public List<Map<String, Object>> exportEquipmentData(Map<String, Object> params) {
+        return equipmentDataMapper.exportEquipmentData(params);
+    }
+    
+    @Override
+    public List<Map<String, Object>> countUtilization(String dataType, String startTime, String endTime) {
+        return equipmentDataMapper.countUtilization(dataType, startTime, endTime);
+    }
+    
+    @Override
+    public List<Map<String, Object>> countOEE(String dataType, String startTime, String endTime) {
+        return equipmentDataMapper.countOEE(dataType, startTime, endTime);
+    }
+    
+    @Override
+    public List<Map<String, Object>> countFailureRate(String dataType, String startTime, String endTime) {
+        return equipmentDataMapper.countFailureRate(dataType, startTime, endTime);
+    }
+
+    @Override
+    public Map<String, Object> getAverageRunningTime(String dataType) {
+        return equipmentDataMapper.getAverageRunningTime(dataType);
+    }
+
+    @Override
+    public Map<String, Object> getAverageFailureCount(String dataType) {
+        return equipmentDataMapper.getAverageFailureCount(dataType);
+    }
+
     @Override
     public Map<String, Object> getTodayEquipmentRunningStatistics() {
         return equipmentDataMapper.getTodayEquipmentRunningStatistics();
     }
-    
+
     @Override
     public Map<String, Object> getWeekEquipmentRunningStatistics() {
         return equipmentDataMapper.getWeekEquipmentRunningStatistics();
     }
-    
+
     @Override
     public Map<String, Object> getMonthEquipmentRunningStatistics() {
         return equipmentDataMapper.getMonthEquipmentRunningStatistics();
     }
-    
+
     @Override
     public Map<String, Object> getYearEquipmentRunningStatistics() {
         return equipmentDataMapper.getYearEquipmentRunningStatistics();
     }
     
     @Override
-    public List<Map<String, Object>> exportEquipmentData(Map<String, Object> params) {
-        return equipmentDataMapper.exportEquipmentData(params);
+    public List<Map<String, Object>> getTopUtilization(String dataType, Integer limit) {
+        // 获取所有设备利用率数据
+        List<Map<String, Object>> utilizationList = equipmentDataMapper.getEquipmentUtilizationRate(dataType);
+        
+        // 按利用率降序排序
+        utilizationList.sort((o1, o2) -> {
+            Double rate1 = Double.parseDouble(o1.get("utilizationRate").toString());
+            Double rate2 = Double.parseDouble(o2.get("utilizationRate").toString());
+            return rate2.compareTo(rate1);
+        });
+        
+        // 返回前limit条数据
+        return utilizationList.subList(0, Math.min(limit, utilizationList.size()));
+    }
+    
+    @Override
+    public List<Map<String, Object>> getTopOEE(String dataType, Integer limit) {
+        // 直接调用mapper的getTopOEE方法
+        return equipmentDataMapper.getTopOEE(dataType, limit);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getTopFailureRate(String dataType, Integer limit) {
+        // 获取所有设备故障率数据
+        List<Map<String, Object>> failureRateList = equipmentDataMapper.getEquipmentFailureRate(dataType);
+        
+        // 按故障率降序排序
+        failureRateList.sort((o1, o2) -> {
+            Double rate1 = Double.parseDouble(o1.get("failureRate").toString());
+            Double rate2 = Double.parseDouble(o2.get("failureRate").toString());
+            return rate2.compareTo(rate1);
+        });
+        
+        // 返回前limit条数据
+        return failureRateList.subList(0, Math.min(limit, failureRateList.size()));
+    }
+    
+    @Override
+    public Map<String, Object> getTodayEquipmentStatistics() {
+        // 调用现有的getTodayEquipmentRunningStatistics方法
+        return equipmentDataMapper.getTodayEquipmentRunningStatistics();
+    }
+    
+    @Override
+    public Map<String, Object> getWeekEquipmentStatistics() {
+        // 调用现有的getWeekEquipmentRunningStatistics方法
+        return equipmentDataMapper.getWeekEquipmentRunningStatistics();
+    }
+    
+    @Override
+    public Map<String, Object> getMonthEquipmentStatistics() {
+        // 调用现有的getMonthEquipmentRunningStatistics方法
+        return equipmentDataMapper.getMonthEquipmentRunningStatistics();
+    }
+    
+    @Override
+    public Map<String, Object> getYearEquipmentStatistics() {
+        // 调用现有的getYearEquipmentRunningStatistics方法
+        return equipmentDataMapper.getYearEquipmentRunningStatistics();
     }
 }

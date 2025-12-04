@@ -175,4 +175,18 @@ public interface EquipmentMaintenanceMapper {
      * @return 类型和记录数的映射
      */
     List<Map<String, Object>> countByType();
+    
+    /**
+     * 根据参数查询维护保养记录
+     * @param params 查询参数
+     * @return 维护保养记录列表
+     */
+    List<EquipmentMaintenance> selectByParams(Map<String, Object> params);
+    
+    /**
+     * 根据前缀查询最大保养单号
+     * @param prefix 单号前缀
+     * @return 最大保养单号
+     */
+    String selectMaxCodeByPrefix(String prefix);
 }

@@ -28,7 +28,7 @@ public class EquipmentDataController {
             EquipmentData data = equipmentDataService.selectById(id);
             return Result.success(data);
         } catch (Exception e) {
-            return Result.error(e.getMessage());
+            return Result.fail(e.getMessage());
         }
     }
     
@@ -41,7 +41,7 @@ public class EquipmentDataController {
             EquipmentData data = equipmentDataService.selectByDataTypeAndPeriod(dataType, period);
             return Result.success(data);
         } catch (Exception e) {
-            return Result.error(e.getMessage());
+            return Result.fail(e.getMessage());
         }
     }
     
@@ -54,7 +54,7 @@ public class EquipmentDataController {
             List<EquipmentData> list = equipmentDataService.selectByEquipmentId(equipmentId);
             return Result.success(list);
         } catch (Exception e) {
-            return Result.error(e.getMessage());
+            return Result.fail(e.getMessage());
         }
     }
     
