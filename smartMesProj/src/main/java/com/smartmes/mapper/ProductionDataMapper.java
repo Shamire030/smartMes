@@ -1,0 +1,182 @@
+package com.smartmes.mapper;
+
+import com.smartmes.model.ProductionData;
+import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 生产数据统计分析Mapper接口
+ */
+@Mapper
+public interface ProductionDataMapper {
+    
+    /**
+     * 根据ID查询生产数据
+     * @param id 主键ID
+     * @return 生产数据对象
+     */
+    ProductionData selectById(Integer id);
+    
+    /**
+     * 根据数据类型和周期查询生产数据
+     * @param dataType 数据类型
+     * @param period 统计周期
+     * @return 生产数据对象
+     */
+    ProductionData selectByDataTypeAndPeriod(String dataType, String period);
+    
+    /**
+     * 根据产品ID查询生产数据
+     * @param productId 产品ID
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByProductId(Integer productId);
+    
+    /**
+     * 根据工单ID查询生产数据
+     * @param workOrderId 工单ID
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByWorkOrderId(Integer workOrderId);
+    
+    /**
+     * 根据班次查询生产数据
+     * @param shift 班次
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByShift(String shift);
+    
+    /**
+     * 根据时间范围查询生产数据
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByTimeRange(String startTime, String endTime);
+    
+    /**
+     * 根据产品ID和时间范围查询生产数据
+     * @param productId 产品ID
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByProductIdAndTimeRange(Integer productId, String startTime, String endTime);
+    
+    /**
+     * 根据数据类型查询生产数据列表
+     * @param dataType 数据类型
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByDataType(String dataType);
+    
+    /**
+     * 分页查询生产数据
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectPage(Integer offset, Integer limit);
+    
+    /**
+     * 查询生产数据总数
+     * @return 数据总数
+     */
+    Integer selectCount();
+    
+    /**
+     * 查询所有生产数据
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectAll();
+    
+    /**
+     * 根据条件查询生产数据
+     * @param params 查询参数
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByParams(Map<String, Object> params);
+    
+    /**
+     * 插入生产数据
+     * @param productionData 生产数据对象
+     * @return 影响行数
+     */
+    Integer insert(ProductionData productionData);
+    
+    /**
+     * 更新生产数据
+     * @param productionData 生产数据对象
+     * @return 影响行数
+     */
+    Integer update(ProductionData productionData);
+    
+    /**
+     * 根据ID删除生产数据
+     * @param id 主键ID
+     * @return 影响行数
+     */
+    Integer deleteById(Integer id);
+    
+    /**
+     * 批量插入生产数据
+     * @param list 生产数据列表
+     * @return 影响行数
+     */
+    Integer batchInsert(List<ProductionData> list);
+    
+    /**
+     * 根据数据类型和产品统计产量
+     * @param dataType 数据类型
+     * @param productId 产品ID
+     * @return 统计结果
+     */
+    Map<String, Object> countQuantityByDataTypeAndProduct(String dataType, Integer productId);
+    
+    /**
+     * 根据数据类型统计各产品产量
+     * @param dataType 数据类型
+     * @return 产品产量统计列表
+     */
+    List<Map<String, Object>> countQuantityByProduct(String dataType);
+    
+    /**
+     * 根据数据类型统计各工单产量
+     * @param dataType 数据类型
+     * @return 工单产量统计列表
+     */
+    List<Map<String, Object>> countQuantityByWorkOrder(String dataType);
+    
+    /**
+     * 根据数据类型统计各班次产量
+     * @param dataType 数据类型
+     * @return 班次产量统计列表
+     */
+    List<Map<String, Object>> countQuantityByShift(String dataType);
+    
+    /**
+     * 根据数据类型统计合格率趋势
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 合格率趋势数据
+     */
+    List<Map<String, Object>> getPassRateTrend(String dataType, Integer limit);
+    
+    /**
+     * 根据数据类型统计生产效率趋势
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 生产效率趋势数据
+     */
+    List<Map<String, Object>> getProductivityRateTrend(String dataType, Integer limit);
+    
+    /**
+     * 根据产品ID和数据类型统计产量趋势
+     * @param productId 产品ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 产量趋势数据
+     */
+    List<Map<String, Object>> getQuantityTrendByProduct(Integer productId, String dataType, Integer limit);
+}

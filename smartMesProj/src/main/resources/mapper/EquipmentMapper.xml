@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartmes.mapper.EquipmentMapper">
+    
+    <!-- 基础字段映射 -->
+    <resultMap id="EquipmentResultMap" type="com.smartmes.model.Equipment">
+        <id column="id" property="id" />
+        <result column="equipment_code" property="equipmentCode" />
+        <result column="equipment_name" property="equipmentName" />
+        <result column="equipment_model" property="equipmentModel" />
+        <result column="equipment_type_id" property="equipmentTypeId" />
+        <result column="equipment_type_name" property="equipmentTypeName" />
+        <result column="factory_id" property="factoryId" />
+        <result column="workshop_id" property="workshopId" />
+        <result column="production_line_id" property="productionLineId" />
+        <result column="status" property="status" />
+        <result column="online_status" property="onlineStatus" />
+        <result column="location" property="location" />
+        <result column="responsible_person_id" property="responsiblePersonId" />
+        <result column="responsible_person_name" property="responsiblePersonName" />
+        <result column="manufacturer" property="manufacturer" />
+        <result column="supplier" property="supplier" />
+        <result column="purchase_date" property="purchaseDate" />
+        <result column="installation_date" property="installationDate" />
+        <result column="expected_use_years" property="expectedUseYears" />
+        <result column="total_running_hours" property="totalRunningHours" />
+        <result column="equipment_value" property="equipmentValue" />
+        <result column="description" property="description" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="last_status_update_time" property="lastStatusUpdateTime" />
+        <result column="last_online_time" property="lastOnlineTime" />
+    </resultMap>
+    
+    <!-- 根据ID查询设备 -->
+    <select id="selectById" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE id = #{id}
+    </select>
+    
+    <!-- 根据设备编码查询设备 -->
+    <select id="selectByEquipmentCode" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE equipment_code = #{equipmentCode}
+    </select>
+    
+    <!-- 根据设备名称查询设备 -->
+    <select id="selectByEquipmentName" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE equipment_name LIKE CONCAT('%', #{equipmentName}, '%')
+    </select>
+    
+    <!-- 根据设备类型查询设备 -->
+    <select id="selectByEquipmentTypeId" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE equipment_type_id = #{equipmentTypeId}
+    </select>
+    
+    <!-- 根据状态查询设备 -->
+    <select id="selectByStatus" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE status = #{status}
+    </select>
+    
+    <!-- 根据在线状态查询设备 -->
+    <select id="selectByOnlineStatus" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE online_status = #{onlineStatus}
+    </select>
+    
+    <!-- 根据所在车间查询设备 -->
+    <select id="selectByWorkshopId" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE workshop_id = #{workshopId}
+    </select>
+    
+    <!-- 根据所在产线查询设备 -->
+    <select id="selectByProductionLineId" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE production_line_id = #{productionLineId}
+    </select>
+    
+    <!-- 根据负责人ID查询设备 -->
+    <select id="selectByResponsiblePersonId" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment WHERE responsible_person_id = #{responsiblePersonId}
+    </select>
+    
+    <!-- 分页查询设备列表 -->
+    <select id="selectPage" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询设备总数 -->
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM equipment
+    </select>
+    
+    <!-- 查询所有设备 -->
+    <select id="selectAll" resultMap="EquipmentResultMap">
+        SELECT * FROM equipment
+    </select>
+    
+    <!-- 插入设备 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO equipment (
+            equipment_code, equipment_name, equipment_model, equipment_type_id,
+            equipment_type_name, factory_id, workshop_id, production_line_id,
+            status, online_status, location, responsible_person_id,
+            responsible_person_name, manufacturer, supplier, purchase_date,
+            installation_date, expected_use_years, total_running_hours,
+            equipment_value, description, remark, create_time, update_time,
+            last_status_update_time, last_online_time
+        ) VALUES (
+            #{equipmentCode}, #{equipmentName}, #{equipmentModel}, #{equipmentTypeId},
+            #{equipmentTypeName}, #{factoryId}, #{workshopId}, #{productionLineId},
+            #{status}, #{onlineStatus}, #{location}, #{responsiblePersonId},
+            #{responsiblePersonName}, #{manufacturer}, #{supplier}, #{purchaseDate},
+            #{installationDate}, #{expectedUseYears}, #{totalRunningHours},
+            #{equipmentValue}, #{description}, #{remark}, #{createTime}, #{updateTime},
+            #{lastStatusUpdateTime}, #{lastOnlineTime}
+        )
+    </insert>
+    
+    <!-- 更新设备 -->
+    <update id="update">
+        UPDATE equipment SET
+            equipment_name = #{equipmentName},
+            equipment_model = #{equipmentModel},
+            equipment_type_id = #{equipmentTypeId},
+            equipment_type_name = #{equipmentTypeName},
+            factory_id = #{factoryId},
+            workshop_id = #{workshopId},
+            production_line_id = #{productionLineId},
+            location = #{location},
+            responsible_person_id = #{responsiblePersonId},
+            responsible_person_name = #{responsiblePersonName},
+            manufacturer = #{manufacturer},
+            supplier = #{supplier},
+            purchase_date = #{purchaseDate},
+            installation_date = #{installationDate},
+            expected_use_years = #{expectedUseYears},
+            equipment_value = #{equipmentValue},
+            description = #{description},
+            remark = #{remark},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新设备状态 -->
+    <update id="updateStatus">
+        UPDATE equipment 
+        SET status = #{status}, 
+            last_status_update_time = NOW(),
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新设备在线状态 -->
+    <update id="updateOnlineStatus">
+        UPDATE equipment 
+        SET online_status = #{onlineStatus}, 
+            last_online_time = NOW(),
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新设备运行时间 -->
+    <update id="updateRunningHours">
+        UPDATE equipment 
+        SET total_running_hours = total_running_hours + #{additionalHours},
+            last_online_time = #{lastOnlineTime},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除设备 -->
+    <delete id="deleteById">
+        DELETE FROM equipment WHERE id = #{id}
+    </delete>
+</mapper>

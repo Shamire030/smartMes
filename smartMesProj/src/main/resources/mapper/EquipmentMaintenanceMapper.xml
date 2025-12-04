@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartmes.mapper.EquipmentMaintenanceMapper">
+    
+    <!-- 基础字段映射 -->
+    <resultMap id="EquipmentMaintenanceResultMap" type="com.smartmes.model.EquipmentMaintenance">
+        <id column="id" property="id" />
+        <result column="maintenance_code" property="maintenanceCode" />
+        <result column="equipment_id" property="equipmentId" />
+        <result column="equipment_code" property="equipmentCode" />
+        <result column="equipment_name" property="equipmentName" />
+        <result column="maintenance_type" property="maintenanceType" />
+        <result column="maintenance_plan_id" property="maintenancePlanId" />
+        <result column="plan_start_time" property="planStartTime" />
+        <result column="plan_end_time" property="planEndTime" />
+        <result column="actual_start_time" property="actualStartTime" />
+        <result column="actual_end_time" property="actualEndTime" />
+        <result column="status" property="status" />
+        <result column="maintenance_content" property="maintenanceContent" />
+        <result column="maintenance_result" property="maintenanceResult" />
+        <result column="discovered_issues" property="discoveredIssues" />
+        <result column="handling_measures" property="handlingMeasures" />
+        <result column="maintenance_person_id" property="maintenancePersonId" />
+        <result column="maintenance_person_name" property="maintenancePersonName" />
+        <result column="verifier_id" property="verifierId" />
+        <result column="verifier_name" property="verifierName" />
+        <result column="verify_time" property="verifyTime" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    
+    <!-- 根据ID查询维护保养记录 -->
+    <select id="selectById" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance WHERE id = #{id}
+    </select>
+    
+    <!-- 根据保养单号查询维护保养记录 -->
+    <select id="selectByMaintenanceCode" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance WHERE maintenance_code = #{maintenanceCode}
+    </select>
+    
+    <!-- 根据设备ID查询维护保养记录 -->
+    <select id="selectByEquipmentId" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance WHERE equipment_id = #{equipmentId} ORDER BY create_time DESC
+    </select>
+    
+    <!-- 根据保养类型查询维护保养记录 -->
+    <select id="selectByMaintenanceType" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance WHERE maintenance_type = #{maintenanceType}
+    </select>
+    
+    <!-- 根据保养状态查询维护保养记录 -->
+    <select id="selectByStatus" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance WHERE status = #{status}
+    </select>
+    
+    <!-- 根据保养负责人查询维护保养记录 -->
+    <select id="selectByMaintenancePersonId" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance WHERE maintenance_person_id = #{maintenancePersonId}
+    </select>
+    
+    <!-- 查询时间范围内的维护保养记录 -->
+    <select id="selectByTimeRange" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance 
+        WHERE plan_start_time BETWEEN #{startTime} AND #{endTime} 
+        ORDER BY plan_start_time ASC
+    </select>
+    
+    <!-- 查询设备在指定时间范围内的维护保养记录 -->
+    <select id="selectByEquipmentIdAndTimeRange" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance 
+        WHERE equipment_id = #{equipmentId} 
+        AND plan_start_time BETWEEN #{startTime} AND #{endTime} 
+        ORDER BY plan_start_time ASC
+    </select>
+    
+    <!-- 分页查询维护保养记录 -->
+    <select id="selectPage" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询维护保养记录总数 -->
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM equipment_maintenance
+    </select>
+    
+    <!-- 查询所有维护保养记录 -->
+    <select id="selectAll" resultMap="EquipmentMaintenanceResultMap">
+        SELECT * FROM equipment_maintenance
+    </select>
+    
+    <!-- 插入维护保养记录 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO equipment_maintenance (
+            maintenance_code, equipment_id, equipment_code, equipment_name,
+            maintenance_type, maintenance_plan_id, plan_start_time, plan_end_time,
+            actual_start_time, actual_end_time, status, maintenance_content,
+            maintenance_result, discovered_issues, handling_measures,
+            maintenance_person_id, maintenance_person_name, verifier_id,
+            verifier_name, verify_time, remark, create_time, update_time
+        ) VALUES (
+            #{maintenanceCode}, #{equipmentId}, #{equipmentCode}, #{equipmentName},
+            #{maintenanceType}, #{maintenancePlanId}, #{planStartTime}, #{planEndTime},
+            #{actualStartTime}, #{actualEndTime}, #{status}, #{maintenanceContent},
+            #{maintenanceResult}, #{discoveredIssues}, #{handlingMeasures},
+            #{maintenancePersonId}, #{maintenancePersonName}, #{verifierId},
+            #{verifierName}, #{verifyTime}, #{remark}, #{createTime}, #{updateTime}
+        )
+    </insert>
+    
+    <!-- 更新维护保养记录 -->
+    <update id="update">
+        UPDATE equipment_maintenance SET
+            equipment_id = #{equipmentId},
+            equipment_code = #{equipmentCode},
+            equipment_name = #{equipmentName},
+            maintenance_type = #{maintenanceType},
+            maintenance_plan_id = #{maintenancePlanId},
+            plan_start_time = #{planStartTime},
+            plan_end_time = #{planEndTime},
+            maintenance_content = #{maintenanceContent},
+            maintenance_person_id = #{maintenancePersonId},
+            maintenance_person_name = #{maintenancePersonName},
+            remark = #{remark},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新保养状态 -->
+    <update id="updateStatus">
+        UPDATE equipment_maintenance 
+        SET status = #{status}, 
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新实际开始时间 -->
+    <update id="updateActualStartTime">
+        UPDATE equipment_maintenance 
+        SET actual_start_time = #{actualStartTime}, 
+            status = 1, -- 进行中
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新实际结束时间 -->
+    <update id="updateActualEndTime">
+        UPDATE equipment_maintenance 
+        SET actual_end_time = #{actualEndTime}, 
+            status = 2, -- 已完成
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新保养结果 -->
+    <update id="updateMaintenanceResult">
+        UPDATE equipment_maintenance 
+        SET maintenance_result = #{maintenanceResult},
+            discovered_issues = #{discoveredIssues},
+            handling_measures = #{handlingMeasures},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新验收信息 -->
+    <update id="updateVerification">
+        UPDATE equipment_maintenance 
+        SET verifier_id = #{verifierId},
+            verifier_name = #{verifierName},
+            verify_time = #{verifyTime},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除维护保养记录 -->
+    <delete id="deleteById">
+        DELETE FROM equipment_maintenance WHERE id = #{id}
+    </delete>
+</mapper>

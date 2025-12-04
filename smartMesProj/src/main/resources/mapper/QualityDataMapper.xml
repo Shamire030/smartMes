@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartmes.mapper.QualityDataMapper">
+    
+    <!-- 质量数据结果集映射 -->
+    <resultMap id="QualityDataResultMap" type="com.smartmes.model.QualityData">
+        <id column="id" property="id" />
+        <result column="data_type" property="dataType" />
+        <result column="period" property="period" />
+        <result column="period_start_time" property="periodStartTime" />
+        <result column="period_end_time" property="periodEndTime" />
+        <result column="inspection_no" property="inspectionNo" />
+        <result column="inspection_type" property="inspectionType" />
+        <result column="product_id" property="productId" />
+        <result column="product_code" property="productCode" />
+        <result column="product_name" property="productName" />
+        <result column="sample_quantity" property="sampleQuantity" />
+        <result column="total_quantity" property="totalQuantity" />
+        <result column="qualified_quantity" property="qualifiedQuantity" />
+        <result column="defective_quantity" property="defectiveQuantity" />
+        <result column="pass_rate" property="passRate" />
+        <result column="defect_count" property="defectCount" />
+        <result column="main_defect_type" property="mainDefectType" />
+        <result column="main_defect_reason" property="mainDefectReason" />
+        <result column="equipment_id" property="equipmentId" />
+        <result column="work_station_id" property="workStationId" />
+        <result column="operator_id" property="operatorId" />
+        <result column="inspector_id" property="inspectorId" />
+        <result column="inspection_time" property="inspectionTime" />
+        <result column="status" property="status" />
+        <result column="result" property="result" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    
+    <!-- 根据ID查询质量数据 -->
+    <select id="selectById" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE id = #{id}
+    </select>
+    
+    <!-- 根据数据类型和周期查询质量数据 -->
+    <select id="selectByDataTypeAndPeriod" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE data_type = #{dataType} AND period = #{period}
+    </select>
+    
+    <!-- 根据产品ID查询质量数据 -->
+    <select id="selectByProductId" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE product_id = #{productId}
+    </select>
+    
+    <!-- 根据质检类型查询质量数据 -->
+    <select id="selectByInspectionType" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE inspection_type = #{inspectionType}
+    </select>
+    
+    <!-- 根据设备ID查询质量数据 -->
+    <select id="selectByEquipmentId" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE equipment_id = #{equipmentId}
+    </select>
+    
+    <!-- 根据工位ID查询质量数据 -->
+    <select id="selectByWorkStationId" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE work_station_id = #{workStationId}
+    </select>
+    
+    <!-- 根据操作人ID查询质量数据 -->
+    <select id="selectByOperatorId" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE operator_id = #{operatorId}
+    </select>
+    
+    <!-- 根据时间范围查询质量数据 -->
+    <select id="selectByTimeRange" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data 
+        WHERE inspection_time >= #{startTime} AND inspection_time <= #{endTime}
+    </select>
+    
+    <!-- 根据产品ID和时间范围查询质量数据 -->
+    <select id="selectByProductIdAndTimeRange" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data 
+        WHERE product_id = #{productId} 
+        AND inspection_time >= #{startTime} 
+        AND inspection_time <= #{endTime}
+    </select>
+    
+    <!-- 根据数据类型查询质量数据列表 -->
+    <select id="selectByDataType" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data WHERE data_type = #{dataType}
+    </select>
+    
+    <!-- 分页查询质量数据 -->
+    <select id="selectPage" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询质量数据总数 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM quality_data
+    </select>
+    
+    <!-- 查询所有质量数据 -->
+    <select id="selectAll" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data
+    </select>
+    
+    <!-- 根据条件查询质量数据 -->
+    <select id="selectByParams" resultMap="QualityDataResultMap">
+        SELECT * FROM quality_data
+        <where>
+            <if test="dataType != null and dataType != ''">
+                AND data_type = #{dataType}
+            </if>
+            <if test="period != null and period != ''">
+                AND period = #{period}
+            </if>
+            <if test="productId != null">
+                AND product_id = #{productId}
+            </if>
+            <if test="inspectionType != null and inspectionType != ''">
+                AND inspection_type = #{inspectionType}
+            </if>
+            <if test="equipmentId != null">
+                AND equipment_id = #{equipmentId}
+            </if>
+            <if test="workStationId != null">
+                AND work_station_id = #{workStationId}
+            </if>
+            <if test="operatorId != null">
+                AND operator_id = #{operatorId}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND inspection_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND inspection_time <= #{endTime}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="result != null and result != ''">
+                AND result = #{result}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 插入质量数据 -->
+    <insert id="insert" parameterType="com.smartmes.model.QualityData">
+        INSERT INTO quality_data (
+            data_type, period, period_start_time, period_end_time,
+            inspection_no, inspection_type, product_id, product_code,
+            product_name, sample_quantity, total_quantity, qualified_quantity,
+            defective_quantity, pass_rate, defect_count, main_defect_type,
+            main_defect_reason, equipment_id, work_station_id, operator_id,
+            inspector_id, inspection_time, status, result,
+            remark, create_time, update_time
+        ) VALUES (
+            #{dataType}, #{period}, #{periodStartTime}, #{periodEndTime},
+            #{inspectionNo}, #{inspectionType}, #{productId}, #{productCode},
+            #{productName}, #{sampleQuantity}, #{totalQuantity}, #{qualifiedQuantity},
+            #{defectiveQuantity}, #{passRate}, #{defectCount}, #{mainDefectType},
+            #{mainDefectReason}, #{equipmentId}, #{workStationId}, #{operatorId},
+            #{inspectorId}, #{inspectionTime}, #{status}, #{result},
+            #{remark}, #{createTime}, #{updateTime}
+        )
+    </insert>
+    
+    <!-- 更新质量数据 -->
+    <update id="update" parameterType="com.smartmes.model.QualityData">
+        UPDATE quality_data SET
+            data_type = #{dataType},
+            period = #{period},
+            period_start_time = #{periodStartTime},
+            period_end_time = #{periodEndTime},
+            inspection_no = #{inspectionNo},
+            inspection_type = #{inspectionType},
+            product_id = #{productId},
+            product_code = #{productCode},
+            product_name = #{productName},
+            sample_quantity = #{sampleQuantity},
+            total_quantity = #{totalQuantity},
+            qualified_quantity = #{qualifiedQuantity},
+            defective_quantity = #{defectiveQuantity},
+            pass_rate = #{passRate},
+            defect_count = #{defectCount},
+            main_defect_type = #{mainDefectType},
+            main_defect_reason = #{mainDefectReason},
+            equipment_id = #{equipmentId},
+            work_station_id = #{workStationId},
+            operator_id = #{operatorId},
+            inspector_id = #{inspectorId},
+            inspection_time = #{inspectionTime},
+            status = #{status},
+            result = #{result},
+            remark = #{remark},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据ID删除质量数据 -->
+    <delete id="deleteById">
+        DELETE FROM quality_data WHERE id = #{id}
+    </delete>
+    
+    <!-- 批量插入质量数据 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO quality_data (
+            data_type, period, period_start_time, period_end_time,
+            inspection_no, inspection_type, product_id, product_code,
+            product_name, sample_quantity, total_quantity, qualified_quantity,
+            defective_quantity, pass_rate, defect_count, main_defect_type,
+            main_defect_reason, equipment_id, work_station_id, operator_id,
+            inspector_id, inspection_time, status, result,
+            remark, create_time, update_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.dataType}, #{item.period}, #{item.periodStartTime}, #{item.periodEndTime},
+                #{item.inspectionNo}, #{item.inspectionType}, #{item.productId}, #{item.productCode},
+                #{item.productName}, #{item.sampleQuantity}, #{item.totalQuantity}, #{item.qualifiedQuantity},
+                #{item.defectiveQuantity}, #{item.passRate}, #{item.defectCount}, #{item.mainDefectType},
+                #{item.mainDefectReason}, #{item.equipmentId}, #{item.workStationId}, #{item.operatorId},
+                #{item.inspectorId}, #{item.inspectionTime}, #{item.status}, #{item.result},
+                #{item.remark}, #{item.createTime}, #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+    
+    <!-- 根据数据类型和产品统计质量数据 -->
+    <select id="countQualityByDataTypeAndProduct" resultType="java.util.Map">
+        SELECT 
+            SUM(sample_quantity) as total_sample_quantity,
+            SUM(total_quantity) as total_total_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType} AND product_id = #{productId}
+    </select>
+    
+    <!-- 根据数据类型统计各产品质量数据 -->
+    <select id="countQualityByProduct" resultType="java.util.Map">
+        SELECT 
+            product_id,
+            product_code,
+            product_name,
+            SUM(sample_quantity) as total_sample_quantity,
+            SUM(total_quantity) as total_total_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType}
+        GROUP BY product_id, product_code, product_name
+    </select>
+    
+    <!-- 根据数据类型统计各质检类型质量数据 -->
+    <select id="countQualityByInspectionType" resultType="java.util.Map">
+        SELECT 
+            inspection_type,
+            SUM(sample_quantity) as total_sample_quantity,
+            SUM(total_quantity) as total_total_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType}
+        GROUP BY inspection_type
+    </select>
+    
+    <!-- 根据数据类型统计各设备质量数据 -->
+    <select id="countQualityByEquipment" resultType="java.util.Map">
+        SELECT 
+            equipment_id,
+            SUM(sample_quantity) as total_sample_quantity,
+            SUM(total_quantity) as total_total_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType}
+        GROUP BY equipment_id
+    </select>
+    
+    <!-- 根据数据类型统计各工位质量数据 -->
+    <select id="countQualityByWorkStation" resultType="java.util.Map">
+        SELECT 
+            work_station_id,
+            SUM(sample_quantity) as total_sample_quantity,
+            SUM(total_quantity) as total_total_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType}
+        GROUP BY work_station_id
+    </select>
+    
+    <!-- 根据数据类型统计合格率趋势 -->
+    <select id="getPassRateTrend" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            AVG(pass_rate) as avg_pass_rate
+        FROM quality_data
+        WHERE data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 根据数据类型统计缺陷类型分布 -->
+    <select id="getDefectTypeDistribution" resultType="java.util.Map">
+        SELECT 
+            main_defect_type as defect_type,
+            COUNT(*) as count,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType} AND main_defect_type IS NOT NULL AND main_defect_type != ''
+        GROUP BY main_defect_type
+        ORDER BY total_defect_count DESC
+    </select>
+    
+    <!-- 根据数据类型统计主要缺陷原因分布 -->
+    <select id="getMainDefectReasonDistribution" resultType="java.util.Map">
+        SELECT 
+            main_defect_reason as defect_reason,
+            COUNT(*) as count,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE data_type = #{dataType} AND main_defect_reason IS NOT NULL AND main_defect_reason != ''
+        GROUP BY main_defect_reason
+        ORDER BY total_defect_count DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 根据产品ID和数据类型统计质量趋势 -->
+    <select id="getQualityTrendByProduct" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            AVG(pass_rate) as avg_pass_rate,
+            SUM(defect_count) as total_defect_count
+        FROM quality_data
+        WHERE product_id = #{productId} AND data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+</mapper>

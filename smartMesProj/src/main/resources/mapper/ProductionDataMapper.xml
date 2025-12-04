@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartmes.mapper.ProductionDataMapper">
+    
+    <!-- 生产数据结果集映射 -->
+    <resultMap id="ProductionDataResultMap" type="com.smartmes.model.ProductionData">
+        <id column="id" property="id" />
+        <result column="data_type" property="dataType" />
+        <result column="period" property="period" />
+        <result column="period_start_time" property="periodStartTime" />
+        <result column="period_end_time" property="periodEndTime" />
+        <result column="product_id" property="productId" />
+        <result column="product_code" property="productCode" />
+        <result column="product_name" property="productName" />
+        <result column="work_order_id" property="workOrderId" />
+        <result column="work_order_no" property="workOrderNo" />
+        <result column="plan_quantity" property="planQuantity" />
+        <result column="actual_quantity" property="actualQuantity" />
+        <result column="qualified_quantity" property="qualifiedQuantity" />
+        <result column="defective_quantity" property="defectiveQuantity" />
+        <result column="pass_rate" property="passRate" />
+        <result column="productivity_rate" property="productivityRate" />
+        <result column="shift" property="shift" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="duration" property="duration" />
+        <result column="unit" property="unit" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+    
+    <!-- 根据ID查询生产数据 -->
+    <select id="selectById" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data WHERE id = #{id}
+    </select>
+    
+    <!-- 根据数据类型和周期查询生产数据 -->
+    <select id="selectByDataTypeAndPeriod" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data WHERE data_type = #{dataType} AND period = #{period}
+    </select>
+    
+    <!-- 根据产品ID查询生产数据 -->
+    <select id="selectByProductId" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data WHERE product_id = #{productId}
+    </select>
+    
+    <!-- 根据工单ID查询生产数据 -->
+    <select id="selectByWorkOrderId" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data WHERE work_order_id = #{workOrderId}
+    </select>
+    
+    <!-- 根据班次查询生产数据 -->
+    <select id="selectByShift" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data WHERE shift = #{shift}
+    </select>
+    
+    <!-- 根据时间范围查询生产数据 -->
+    <select id="selectByTimeRange" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data 
+        WHERE period_start_time >= #{startTime} AND period_end_time <= #{endTime}
+    </select>
+    
+    <!-- 根据产品ID和时间范围查询生产数据 -->
+    <select id="selectByProductIdAndTimeRange" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data 
+        WHERE product_id = #{productId} 
+        AND period_start_time >= #{startTime} 
+        AND period_end_time <= #{endTime}
+    </select>
+    
+    <!-- 根据数据类型查询生产数据列表 -->
+    <select id="selectByDataType" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data WHERE data_type = #{dataType}
+    </select>
+    
+    <!-- 分页查询生产数据 -->
+    <select id="selectPage" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询生产数据总数 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM production_data
+    </select>
+    
+    <!-- 查询所有生产数据 -->
+    <select id="selectAll" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data
+    </select>
+    
+    <!-- 根据条件查询生产数据 -->
+    <select id="selectByParams" resultMap="ProductionDataResultMap">
+        SELECT * FROM production_data
+        <where>
+            <if test="dataType != null and dataType != ''">
+                AND data_type = #{dataType}
+            </if>
+            <if test="period != null and period != ''">
+                AND period = #{period}
+            </if>
+            <if test="productId != null">
+                AND product_id = #{productId}
+            </if>
+            <if test="workOrderId != null">
+                AND work_order_id = #{workOrderId}
+            </if>
+            <if test="shift != null and shift != ''">
+                AND shift = #{shift}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND period_start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND period_end_time <= #{endTime}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 插入生产数据 -->
+    <insert id="insert" parameterType="com.smartmes.model.ProductionData">
+        INSERT INTO production_data (
+            data_type, period, period_start_time, period_end_time,
+            product_id, product_code, product_name, work_order_id,
+            work_order_no, plan_quantity, actual_quantity, qualified_quantity,
+            defective_quantity, pass_rate, productivity_rate, shift,
+            start_time, end_time, duration, unit,
+            remark, create_time, update_time, create_by, update_by
+        ) VALUES (
+            #{dataType}, #{period}, #{periodStartTime}, #{periodEndTime},
+            #{productId}, #{productCode}, #{productName}, #{workOrderId},
+            #{workOrderNo}, #{planQuantity}, #{actualQuantity}, #{qualifiedQuantity},
+            #{defectiveQuantity}, #{passRate}, #{productivityRate}, #{shift},
+            #{startTime}, #{endTime}, #{duration}, #{unit},
+            #{remark}, #{createTime}, #{updateTime}, #{createBy}, #{updateBy}
+        )
+    </insert>
+    
+    <!-- 更新生产数据 -->
+    <update id="update" parameterType="com.smartmes.model.ProductionData">
+        UPDATE production_data SET
+            data_type = #{dataType},
+            period = #{period},
+            period_start_time = #{periodStartTime},
+            period_end_time = #{periodEndTime},
+            product_id = #{productId},
+            product_code = #{productCode},
+            product_name = #{productName},
+            work_order_id = #{workOrderId},
+            work_order_no = #{workOrderNo},
+            plan_quantity = #{planQuantity},
+            actual_quantity = #{actualQuantity},
+            qualified_quantity = #{qualifiedQuantity},
+            defective_quantity = #{defectiveQuantity},
+            pass_rate = #{passRate},
+            productivity_rate = #{productivityRate},
+            shift = #{shift},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            duration = #{duration},
+            unit = #{unit},
+            remark = #{remark},
+            update_time = #{updateTime},
+            update_by = #{updateBy}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据ID删除生产数据 -->
+    <delete id="deleteById">
+        DELETE FROM production_data WHERE id = #{id}
+    </delete>
+    
+    <!-- 批量插入生产数据 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO production_data (
+            data_type, period, period_start_time, period_end_time,
+            product_id, product_code, product_name, work_order_id,
+            work_order_no, plan_quantity, actual_quantity, qualified_quantity,
+            defective_quantity, pass_rate, productivity_rate, shift,
+            start_time, end_time, duration, unit,
+            remark, create_time, update_time, create_by, update_by
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.dataType}, #{item.period}, #{item.periodStartTime}, #{item.periodEndTime},
+                #{item.productId}, #{item.productCode}, #{item.productName}, #{item.workOrderId},
+                #{item.workOrderNo}, #{item.planQuantity}, #{item.actualQuantity}, #{item.qualifiedQuantity},
+                #{item.defectiveQuantity}, #{item.passRate}, #{item.productivityRate}, #{item.shift},
+                #{item.startTime}, #{item.endTime}, #{item.duration}, #{item.unit},
+                #{item.remark}, #{item.createTime}, #{item.updateTime}, #{item.createBy}, #{item.updateBy}
+            )
+        </foreach>
+    </insert>
+    
+    <!-- 根据数据类型和产品统计产量 -->
+    <select id="countQuantityByDataTypeAndProduct" resultType="java.util.Map">
+        SELECT 
+            SUM(plan_quantity) as total_plan_quantity,
+            SUM(actual_quantity) as total_actual_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            AVG(productivity_rate) as avg_productivity_rate
+        FROM production_data
+        WHERE data_type = #{dataType} AND product_id = #{productId}
+    </select>
+    
+    <!-- 根据数据类型统计各产品产量 -->
+    <select id="countQuantityByProduct" resultType="java.util.Map">
+        SELECT 
+            product_id,
+            product_code,
+            product_name,
+            SUM(plan_quantity) as total_plan_quantity,
+            SUM(actual_quantity) as total_actual_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            AVG(productivity_rate) as avg_productivity_rate
+        FROM production_data
+        WHERE data_type = #{dataType}
+        GROUP BY product_id, product_code, product_name
+    </select>
+    
+    <!-- 根据数据类型统计各工单产量 -->
+    <select id="countQuantityByWorkOrder" resultType="java.util.Map">
+        SELECT 
+            work_order_id,
+            work_order_no,
+            SUM(plan_quantity) as total_plan_quantity,
+            SUM(actual_quantity) as total_actual_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            AVG(productivity_rate) as avg_productivity_rate
+        FROM production_data
+        WHERE data_type = #{dataType}
+        GROUP BY work_order_id, work_order_no
+    </select>
+    
+    <!-- 根据数据类型统计各班次产量 -->
+    <select id="countQuantityByShift" resultType="java.util.Map">
+        SELECT 
+            shift,
+            SUM(plan_quantity) as total_plan_quantity,
+            SUM(actual_quantity) as total_actual_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate,
+            AVG(productivity_rate) as avg_productivity_rate
+        FROM production_data
+        WHERE data_type = #{dataType}
+        GROUP BY shift
+    </select>
+    
+    <!-- 根据数据类型统计合格率趋势 -->
+    <select id="getPassRateTrend" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            AVG(pass_rate) as avg_pass_rate
+        FROM production_data
+        WHERE data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 根据数据类型统计生产效率趋势 -->
+    <select id="getProductivityRateTrend" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            AVG(productivity_rate) as avg_productivity_rate
+        FROM production_data
+        WHERE data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 根据产品ID和数据类型统计产量趋势 -->
+    <select id="getQuantityTrendByProduct" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            SUM(actual_quantity) as total_actual_quantity,
+            SUM(qualified_quantity) as total_qualified_quantity,
+            SUM(defective_quantity) as total_defective_quantity,
+            AVG(pass_rate) as avg_pass_rate
+        FROM production_data
+        WHERE product_id = #{productId} AND data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+</mapper>

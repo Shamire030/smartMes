@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartmes.mapper.QualityInspectionMapper">
+    
+    <!-- 基础字段映射 -->
+    <resultMap id="QualityInspectionResultMap" type="com.smartmes.model.QualityInspection">
+        <id column="id" property="id" />
+        <result column="inspection_code" property="inspectionCode" />
+        <result column="inspection_type" property="inspectionType" />
+        <result column="related_id" property="relatedId" />
+        <result column="product_id" property="productId" />
+        <result column="batch_no" property="batchNo" />
+        <result column="inspection_quantity" property="inspectionQuantity" />
+        <result column="qualified_quantity" property="qualifiedQuantity" />
+        <result column="unqualified_quantity" property="unqualifiedQuantity" />
+        <result column="defective_rate" property="defectiveRate" />
+        <result column="inspection_result" property="inspectionResult" />
+        <result column="inspection_standard_id" property="inspectionStandardId" />
+        <result column="inspector_id" property="inspectorId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="unqualified_reason" property="unqualifiedReason" />
+        <result column="processing_suggestion" property="processingSuggestion" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    
+    <!-- 根据ID查询质检记录 -->
+    <select id="selectById" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE id = #{id}
+    </select>
+    
+    <!-- 根据质检单号查询质检记录 -->
+    <select id="selectByInspectionCode" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE inspection_code = #{inspectionCode}
+    </select>
+    
+    <!-- 根据质检类型查询质检记录 -->
+    <select id="selectByInspectionType" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE inspection_type = #{inspectionType}
+    </select>
+    
+    <!-- 根据关联ID查询质检记录 -->
+    <select id="selectByRelatedId" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection 
+        WHERE related_id = #{relatedId} AND inspection_type = #{inspectionType}
+    </select>
+    
+    <!-- 根据产品ID查询质检记录 -->
+    <select id="selectByProductId" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE product_id = #{productId}
+    </select>
+    
+    <!-- 根据批次号查询质检记录 -->
+    <select id="selectByBatchNo" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE batch_no = #{batchNo}
+    </select>
+    
+    <!-- 根据检验员ID查询质检记录 -->
+    <select id="selectByInspectorId" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE inspector_id = #{inspectorId}
+    </select>
+    
+    <!-- 根据检验结果查询质检记录 -->
+    <select id="selectByInspectionResult" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection WHERE inspection_result = #{inspectionResult}
+    </select>
+    
+    <!-- 查询时间范围内的质检记录 -->
+    <select id="selectByTimeRange" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection 
+        WHERE create_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+    
+    <!-- 查询所有质检记录 -->
+    <select id="selectAll" resultMap="QualityInspectionResultMap">
+        SELECT * FROM quality_inspection
+    </select>
+    
+    <!-- 插入质检记录 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO quality_inspection (
+            inspection_code, inspection_type, related_id, product_id,
+            batch_no, inspection_quantity, qualified_quantity, unqualified_quantity,
+            defective_rate, inspection_result, inspection_standard_id, inspector_id,
+            start_time, end_time, unqualified_reason, processing_suggestion,
+            remark, create_time, update_time
+        ) VALUES (
+            #{inspectionCode}, #{inspectionType}, #{relatedId}, #{productId},
+            #{batchNo}, #{inspectionQuantity}, #{qualifiedQuantity}, #{unqualifiedQuantity},
+            #{defectiveRate}, #{inspectionResult}, #{inspectionStandardId}, #{inspectorId},
+            #{startTime}, #{endTime}, #{unqualifiedReason}, #{processingSuggestion},
+            #{remark}, #{createTime}, #{updateTime}
+        )
+    </insert>
+    
+    <!-- 更新质检记录 -->
+    <update id="update">
+        UPDATE quality_inspection SET
+            inspection_type = #{inspectionType},
+            related_id = #{relatedId},
+            product_id = #{productId},
+            batch_no = #{batchNo},
+            inspection_quantity = #{inspectionQuantity},
+            qualified_quantity = #{qualifiedQuantity},
+            unqualified_quantity = #{unqualifiedQuantity},
+            defective_rate = #{defectiveRate},
+            inspection_result = #{inspectionResult},
+            inspection_standard_id = #{inspectionStandardId},
+            inspector_id = #{inspectorId},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            unqualified_reason = #{unqualifiedReason},
+            processing_suggestion = #{processingSuggestion},
+            remark = #{remark},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新检验结果 -->
+    <update id="updateInspectionResult">
+        UPDATE quality_inspection 
+        SET inspection_result = #{inspectionResult}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新检验数量 -->
+    <update id="updateInspectionQuantity">
+        UPDATE quality_inspection 
+        SET qualified_quantity = #{qualifiedQuantity},
+            unqualified_quantity = #{unqualifiedQuantity},
+            defective_rate = #{defectiveRate},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除质检记录 -->
+    <delete id="deleteById">
+        DELETE FROM quality_inspection WHERE id = #{id}
+    </delete>
+</mapper>

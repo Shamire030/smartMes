@@ -1,0 +1,40 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build directories
+target/
+build/
+
+# Compressed files
+*.rar
+*.7z
+*.zip
+*.tar.gz
+*.tar.bz2
+
+# IDE files
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
