@@ -29,7 +29,7 @@ public interface EquipmentDataService {
      * @param equipmentId 设备ID
      * @return 设备数据列表
      */
-    List<EquipmentData> selectByEquipmentId(Integer equipmentId);
+    List<EquipmentData> selectByEquipmentId(Long equipmentId);
     
     /**
      * 根据设备类型查询设备数据
@@ -81,7 +81,7 @@ public interface EquipmentDataService {
      * @param endTime 结束时间
      * @return 设备数据列表
      */
-    List<EquipmentData> selectByEquipmentIdAndTimeRange(Integer equipmentId, String startTime, String endTime);
+    List<EquipmentData> selectByEquipmentIdAndTimeRange(Long equipmentId, String startTime, String endTime);
     
     /**
      * 根据数据类型查询设备数据列表
@@ -158,7 +158,7 @@ public interface EquipmentDataService {
      * @param equipmentId 设备ID
      * @return 统计结果
      */
-    Map<String, Object> countEquipmentDataByDataTypeAndEquipment(String dataType, Integer equipmentId);
+    Map<String, Object> countEquipmentDataByDataTypeAndEquipment(String dataType, Long equipmentId);
     
     /**
      * 根据数据类型统计各设备运行数据
@@ -262,7 +262,7 @@ public interface EquipmentDataService {
      * @param limit 限制数量
      * @return 单设备利用率趋势分析
      */
-    List<Map<String, Object>> getSingleEquipmentUtilizationTrend(Integer equipmentId, String dataType, Integer limit);
+    List<Map<String, Object>> getSingleEquipmentUtilizationTrend(Long equipmentId, String dataType, Integer limit);
     
     /**
      * 获取单设备OEE趋势分析
@@ -271,7 +271,38 @@ public interface EquipmentDataService {
      * @param limit 限制数量
      * @return 单设备OEE趋势分析
      */
-    List<Map<String, Object>> getSingleEquipmentOEETrend(Integer equipmentId, String dataType, Integer limit);
+    List<Map<String, Object>> getSingleEquipmentOEETrend(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 获取单设备故障率趋势分析
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 单设备故障率趋势分析
+     */
+    List<Map<String, Object>> getSingleEquipmentFailureRateTrend(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 获取设备综合效率分析
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @return 设备综合效率分析结果
+     */
+    Map<String, Object> getComprehensiveEfficiencyAnalysis(Long equipmentId, String dataType);
+    
+    /**
+     * 获取设备类型效率对比
+     * @param dataType 数据类型
+     * @return 设备类型效率对比结果
+     */
+    List<Map<String, Object>> getEfficiencyComparisonByType(String dataType);
+    
+    /**
+     * 获取生产线设备效率对比
+     * @param dataType 数据类型
+     * @return 生产线设备效率对比结果
+     */
+    List<Map<String, Object>> getEfficiencyComparisonByProductionLine(String dataType);
     
     /**
      * 获取今日设备运行统计
@@ -298,9 +329,107 @@ public interface EquipmentDataService {
     Map<String, Object> getYearEquipmentRunningStatistics();
     
     /**
+     * 获取今日设备统计
+     * @return 今日设备统计
+     */
+    Map<String, Object> getTodayEquipmentStatistics();
+    
+    /**
+     * 获取本周设备统计
+     * @return 本周设备统计
+     */
+    Map<String, Object> getWeekEquipmentStatistics();
+    
+    /**
+     * 获取本月设备统计
+     * @return 本月设备统计
+     */
+    Map<String, Object> getMonthEquipmentStatistics();
+    
+    /**
+     * 获取年度设备统计
+     * @return 年度设备统计
+     */
+    Map<String, Object> getYearEquipmentStatistics();
+    
+    /**
      * 导出设备数据
      * @param params 查询参数
      * @return 导出数据
      */
     List<Map<String, Object>> exportEquipmentData(Map<String, Object> params);
+    
+    /**
+     * 统计设备利用率
+     * @param dataType 数据类型
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 设备利用率统计结果
+     */
+    List<Map<String, Object>> countUtilization(String dataType, String startTime, String endTime);
+    
+    /**
+     * 统计设备OEE
+     * @param dataType 数据类型
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 设备OEE统计结果
+     */
+    List<Map<String, Object>> countOEE(String dataType, String startTime, String endTime);
+    
+    /**
+     * 统计设备故障率
+     * @param dataType 数据类型
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 设备故障率统计结果
+     */
+    List<Map<String, Object>> countFailureRate(String dataType, String startTime, String endTime);
+    
+    /**
+     * 获取设备平均运行时间
+     * @param dataType 数据类型
+     * @return 设备平均运行时间统计结果
+     */
+    Map<String, Object> getAverageRunningTime(String dataType);
+    
+    /**
+     * 获取设备平均故障次数
+     * @param dataType 数据类型
+     * @return 设备平均故障次数统计结果
+     */
+    Map<String, Object> getAverageFailureCount(String dataType);
+    
+    /**
+     * 获取设备利用率TOP10
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备利用率TOP10统计结果
+     */
+    List<Map<String, Object>> getTopUtilization(String dataType, Integer limit);
+    
+    /**
+     * 获取设备OEE TOP10
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备OEE TOP10统计结果
+     */
+    List<Map<String, Object>> getTopOEE(String dataType, Integer limit);
+    
+    /**
+     * 获取设备故障率TOP10
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备故障率TOP10统计结果
+     */
+    List<Map<String, Object>> getTopFailureRate(String dataType, Integer limit);
+    
+    /**
+     * 获取设备平均维修时间
+     * @param dataType 数据类型
+     * @return 设备平均维修时间统计结果
+     */
+    Map<String, Object> getAverageRepairTime(String dataType);
+    
+
 }

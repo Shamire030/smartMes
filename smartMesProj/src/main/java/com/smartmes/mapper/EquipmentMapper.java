@@ -4,6 +4,7 @@ import com.smartmes.model.Equipment;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Date;
 
 /**
@@ -40,6 +41,20 @@ public interface EquipmentMapper {
      * @return 设备对象列表
      */
     List<Equipment> selectByEquipmentTypeId(Long equipmentTypeId);
+    
+    /**
+     * 根据设备类型名称查询设备
+     * @param equipmentType 设备类型名称
+     * @return 设备对象列表
+     */
+    List<Equipment> selectByEquipmentType(String equipmentType);
+    
+    /**
+     * 根据设备区域查询设备
+     * @param location 设备区域
+     * @return 设备对象列表
+     */
+    List<Equipment> selectByLocation(String location);
     
     /**
      * 根据状态查询设备
@@ -134,6 +149,55 @@ public interface EquipmentMapper {
      * @return 更新行数
      */
     int updateRunningHours(Long id, Double additionalHours, Date lastOnlineTime);
+    
+    /**
+     * 更新设备运行时间（简单版本）
+     * @param id 设备ID
+     * @param runtime 运行时间
+     * @return 更新行数
+     */
+    int updateRuntime(Long id, Integer runtime);
+    
+    /**
+     * 更新设备责任人
+     * @param id 设备ID
+     * @param responsiblePersonId 责任人ID
+     * @param responsiblePersonName 责任人姓名
+     * @return 更新行数
+     */
+    int updateResponsiblePerson(Long id, Long responsiblePersonId, String responsiblePersonName);
+    
+    /**
+     * 根据参数查询设备
+     * @param params 查询参数
+     * @return 设备对象列表
+     */
+    List<Equipment> selectByParams(Map<String, Object> params);
+    
+    /**
+     * 根据前缀查询最大设备编码
+     * @param prefix 编码前缀
+     * @return 最大设备编码
+     */
+    String selectMaxCodeByPrefix(String prefix);
+    
+    /**
+     * 按状态统计设备数量
+     * @return 状态和数量的映射
+     */
+    List<Map<String, Object>> countByStatus();
+    
+    /**
+     * 按类型统计设备数量
+     * @return 类型和数量的映射
+     */
+    List<Map<String, Object>> countByType();
+    
+    /**
+     * 按区域统计设备数量
+     * @return 区域和数量的映射
+     */
+    List<Map<String, Object>> countByLocation();
     
     /**
      * 删除设备

@@ -3,6 +3,7 @@ package com.smartmes.service;
 import com.smartmes.model.EquipmentMaintenance;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 /**
  * 设备维护保养服务接口
@@ -14,7 +15,7 @@ public interface EquipmentMaintenanceService {
      * @param id 维护保养记录ID
      * @return 维护保养记录
      */
-    EquipmentMaintenance selectById(Integer id);
+    EquipmentMaintenance selectById(Long id);
     
     /**
      * 根据保养单号查询维护保养记录
@@ -28,7 +29,7 @@ public interface EquipmentMaintenanceService {
      * @param equipmentId 设备ID
      * @return 维护保养记录列表
      */
-    List<EquipmentMaintenance> selectByEquipmentId(Integer equipmentId);
+    List<EquipmentMaintenance> selectByEquipmentId(Long equipmentId);
     
     /**
      * 根据保养类型查询维护保养记录
@@ -49,7 +50,7 @@ public interface EquipmentMaintenanceService {
      * @param maintenancePersonId 保养负责人ID
      * @return 维护保养记录列表
      */
-    List<EquipmentMaintenance> selectByMaintenancePersonId(Integer maintenancePersonId);
+    List<EquipmentMaintenance> selectByMaintenancePersonId(Long maintenancePersonId);
     
     /**
      * 查询时间范围内的维护保养记录
@@ -66,7 +67,7 @@ public interface EquipmentMaintenanceService {
      * @param endTime 结束时间
      * @return 维护保养记录列表
      */
-    List<EquipmentMaintenance> selectByEquipmentIdAndTimeRange(Integer equipmentId, String startTime, String endTime);
+    List<EquipmentMaintenance> selectByEquipmentIdAndTimeRange(Long equipmentId, String startTime, String endTime);
     
     /**
      * 分页查询维护保养记录
@@ -114,7 +115,7 @@ public interface EquipmentMaintenanceService {
      * @param id 维护保养记录ID
      * @return 影响行数
      */
-    Integer deleteById(Integer id);
+    Integer deleteById(Long id);
     
     /**
      * 更新保养状态
@@ -122,7 +123,7 @@ public interface EquipmentMaintenanceService {
      * @param status 保养状态
      * @return 影响行数
      */
-    Integer updateStatus(Integer id, Integer status);
+    Integer updateStatus(Long id, Integer status);
     
     /**
      * 更新实际开始时间
@@ -130,7 +131,7 @@ public interface EquipmentMaintenanceService {
      * @param actualStartTime 实际开始时间
      * @return 影响行数
      */
-    Integer updateActualStartTime(Integer id, String actualStartTime);
+    Integer updateActualStartTime(Long id, String actualStartTime);
     
     /**
      * 更新实际结束时间
@@ -138,7 +139,7 @@ public interface EquipmentMaintenanceService {
      * @param actualEndTime 实际结束时间
      * @return 影响行数
      */
-    Integer updateActualEndTime(Integer id, String actualEndTime);
+    Integer updateActualEndTime(Long id, String actualEndTime);
     
     /**
      * 更新保养结果
@@ -148,7 +149,7 @@ public interface EquipmentMaintenanceService {
      * @param handlingMeasures 处理措施
      * @return 影响行数
      */
-    Integer updateMaintenanceResult(Integer id, String maintenanceResult, String discoveredIssues, String handlingMeasures);
+    Integer updateMaintenanceResult(Long id, String maintenanceResult, String discoveredIssues, String handlingMeasures);
     
     /**
      * 更新验收信息
@@ -158,7 +159,7 @@ public interface EquipmentMaintenanceService {
      * @param verifyTime 验收时间
      * @return 影响行数
      */
-    Integer updateVerification(Integer id, Integer verifierId, String verifierName, String verifyTime);
+    Integer updateVerification(Long id, Long verifierId, String verifierName, String verifyTime);
     
     /**
      * 生成保养单号
@@ -182,7 +183,7 @@ public interface EquipmentMaintenanceService {
      * 设备保养频次统计
      * @return 设备保养频次统计数据
      */
-    Map<Integer, Integer> getEquipmentMaintenanceFrequencyStatistics();
+    Map<Long, Integer> getEquipmentMaintenanceFrequencyStatistics();
     
     /**
      * 开始保养
@@ -191,7 +192,7 @@ public interface EquipmentMaintenanceService {
      * @param operatorName 操作人姓名
      * @return 影响行数
      */
-    Integer startMaintenance(Integer id, Integer operatorId, String operatorName);
+    Integer startMaintenance(Long id, Long operatorId, String operatorName);
     
     /**
      * 完成保养
@@ -201,7 +202,7 @@ public interface EquipmentMaintenanceService {
      * @param handlingMeasures 处理措施
      * @return 影响行数
      */
-    Integer completeMaintenance(Integer id, String maintenanceResult, String discoveredIssues, String handlingMeasures);
+    Integer completeMaintenance(Long id, String maintenanceResult, String discoveredIssues, String handlingMeasures);
     
     /**
      * 验收保养
@@ -210,5 +211,5 @@ public interface EquipmentMaintenanceService {
      * @param verifierName 验收人姓名
      * @return 影响行数
      */
-    Integer verifyMaintenance(Integer id, Integer verifierId, String verifierName);
+    Integer verifyMaintenance(Long id, Long verifierId, String verifierName);
 }

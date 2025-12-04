@@ -14,7 +14,7 @@ public interface EquipmentService {
      * @param id 设备ID
      * @return 设备信息
      */
-    Equipment selectById(Integer id);
+    Equipment selectById(Long id);
     
     /**
      * 根据编码查询设备信息
@@ -56,7 +56,7 @@ public interface EquipmentService {
      * @param responsiblePersonId 负责人ID
      * @return 设备列表
      */
-    List<Equipment> selectByResponsiblePersonId(Integer responsiblePersonId);
+    List<Equipment> selectByResponsiblePersonId(Long responsiblePersonId);
     
     /**
      * 根据在线状态查询设备信息
@@ -111,7 +111,7 @@ public interface EquipmentService {
      * @param id 设备ID
      * @return 影响行数
      */
-    Integer deleteById(Integer id);
+    Integer deleteById(Long id);
     
     /**
      * 更新设备状态
@@ -119,7 +119,7 @@ public interface EquipmentService {
      * @param status 设备状态
      * @return 影响行数
      */
-    Integer updateStatus(Integer id, Integer status);
+    Integer updateStatus(Long id, Integer status);
     
     /**
      * 更新设备在线状态
@@ -127,7 +127,7 @@ public interface EquipmentService {
      * @param onlineStatus 在线状态
      * @return 影响行数
      */
-    Integer updateOnlineStatus(Integer id, Integer onlineStatus);
+    Integer updateOnlineStatus(Long id, Integer onlineStatus);
     
     /**
      * 更新设备运行时间
@@ -135,7 +135,7 @@ public interface EquipmentService {
      * @param runtime 运行时间
      * @return 影响行数
      */
-    Integer updateRuntime(Integer id, Integer runtime);
+    Integer updateRuntime(Long id, Integer runtime);
     
     /**
      * 更新设备责任人
@@ -144,7 +144,7 @@ public interface EquipmentService {
      * @param responsiblePersonName 责任人姓名
      * @return 影响行数
      */
-    Integer updateResponsiblePerson(Integer id, Integer responsiblePersonId, String responsiblePersonName);
+    Integer updateResponsiblePerson(Long id, Long responsiblePersonId, String responsiblePersonName);
     
     /**
      * 生成设备编码

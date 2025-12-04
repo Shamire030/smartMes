@@ -22,7 +22,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     private EquipmentMapper equipmentMapper;
     
     @Override
-    public Equipment selectById(Integer id) {
+    public Equipment selectById(Long id) {
         return equipmentMapper.selectById(id);
     }
     
@@ -52,7 +52,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
     
     @Override
-    public List<Equipment> selectByResponsiblePersonId(Integer responsiblePersonId) {
+    public List<Equipment> selectByResponsiblePersonId(Long responsiblePersonId) {
         return equipmentMapper.selectByResponsiblePersonId(responsiblePersonId);
     }
     
@@ -98,8 +98,8 @@ public class EquipmentServiceImpl implements EquipmentService {
         if (equipment.getOnlineStatus() == null) {
             equipment.setOnlineStatus(0); // 0: 离线
         }
-        if (equipment.getRuntime() == null) {
-            equipment.setRuntime(0);
+        if (equipment.getTotalRunningHours() == null) {
+            equipment.setTotalRunningHours(0.0);
         }
         return equipmentMapper.insert(equipment);
     }
@@ -114,7 +114,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     
     @Transactional
     @Override
-    public Integer deleteById(Integer id) {
+    public Integer deleteById(Long id) {
         // 检查设备是否有关联的维护保养记录或生产记录
         // 这里可以添加业务逻辑验证
         return equipmentMapper.deleteById(id);
@@ -122,7 +122,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     
     @Transactional
     @Override
-    public Integer updateStatus(Integer id, Integer status) {
+    public Integer updateStatus(Long id, Integer status) {
         // 状态流转控制
         Equipment equipment = equipmentMapper.selectById(id);
         if (equipment == null) {
@@ -134,19 +134,19 @@ public class EquipmentServiceImpl implements EquipmentService {
     
     @Transactional
     @Override
-    public Integer updateOnlineStatus(Integer id, Integer onlineStatus) {
+    public Integer updateOnlineStatus(Long id, Integer onlineStatus) {
         return equipmentMapper.updateOnlineStatus(id, onlineStatus);
     }
     
     @Transactional
     @Override
-    public Integer updateRuntime(Integer id, Integer runtime) {
+    public Integer updateRuntime(Long id, Integer runtime) {
         return equipmentMapper.updateRuntime(id, runtime);
     }
     
     @Transactional
     @Override
-    public Integer updateResponsiblePerson(Integer id, Integer responsiblePersonId, String responsiblePersonName) {
+    public Integer updateResponsiblePerson(Long id, Long responsiblePersonId, String responsiblePersonName) {
         return equipmentMapper.updateResponsiblePerson(id, responsiblePersonId, responsiblePersonName);
     }
     
@@ -179,8 +179,8 @@ public class EquipmentServiceImpl implements EquipmentService {
         // 统计各状态设备数量
         List<Map<String, Object>> list = equipmentMapper.countByStatus();
         for (Map<String, Object> map : list) {
-            Integer status = (Integer) map.get("status");
-            Integer count = (Integer) map.get("count");
+            Integer status = ((Number) map.get("status")).intValue();
+            Integer count = ((Number) map.get("count")).intValue();
             statistics.put("status_" + status, count);
         }
         return statistics;
@@ -193,7 +193,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         List<Map<String, Object>> list = equipmentMapper.countByType();
         for (Map<String, Object> map : list) {
             String type = (String) map.get("equipment_type");
-            Integer count = (Integer) map.get("count");
+            Integer count = ((Number) map.get("count")).intValue();
             statistics.put(type, count);
         }
         return statistics;
@@ -206,7 +206,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         List<Map<String, Object>> list = equipmentMapper.countByLocation();
         for (Map<String, Object> map : list) {
             String location = (String) map.get("location");
-            Integer count = (Integer) map.get("count");
+            Integer count = ((Number) map.get("count")).intValue();
             statistics.put(location, count);
         }
         return statistics;

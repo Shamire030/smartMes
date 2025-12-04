@@ -373,4 +373,287 @@
         ORDER BY period_start_time DESC
         LIMIT #{limit}
     </select>
+    
+    <!-- 获取单设备利用率趋势分析 -->
+    <select id="getSingleEquipmentUtilizationTrend" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            utilization_rate
+        FROM equipment_data
+        WHERE equipment_id = #{equipmentId} AND data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 获取单设备OEE趋势分析 -->
+    <select id="getSingleEquipmentOEETrend" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            oee,
+            availability_rate,
+            performance_rate,
+            quality_rate
+        FROM equipment_data
+        WHERE equipment_id = #{equipmentId} AND data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 获取单设备故障率趋势分析 -->
+    <select id="getSingleEquipmentFailureRateTrend" resultType="java.util.Map">
+        SELECT 
+            period,
+            period_start_time,
+            period_end_time,
+            failure_count,
+            failure_time
+        FROM equipment_data
+        WHERE equipment_id = #{equipmentId} AND data_type = #{dataType}
+        ORDER BY period_start_time DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 获取设备综合效率分析 -->
+    <select id="getComprehensiveEfficiencyAnalysis" resultType="java.util.Map">
+        SELECT 
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(availability_rate) as avg_availability_rate,
+            AVG(performance_rate) as avg_performance_rate,
+            AVG(quality_rate) as avg_quality_rate,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE equipment_id = #{equipmentId} AND data_type = #{dataType}
+    </select>
+    
+    <!-- 获取设备类型效率对比 -->
+    <select id="getEfficiencyComparisonByType" resultType="java.util.Map">
+        SELECT 
+            equipment_type,
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(oee) as avg_oee,
+            SUM(failure_count) as total_failure_count
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        GROUP BY equipment_type
+    </select>
+    
+    <!-- 获取生产线设备效率对比 -->
+    <select id="getEfficiencyComparisonByProductionLine" resultType="java.util.Map">
+        SELECT 
+            production_line_id,
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(oee) as avg_oee,
+            SUM(failure_count) as total_failure_count
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        GROUP BY production_line_id
+    </select>
+    
+    <!-- 统计设备利用率 -->
+    <select id="countUtilization" resultType="java.util.Map">
+        SELECT 
+            equipment_id,
+            equipment_code,
+            equipment_name,
+            AVG(utilization_rate) as avg_utilization_rate
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        <if test="startTime != null and startTime != ''">
+            AND period_start_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND period_end_time <= #{endTime}
+        </if>
+        GROUP BY equipment_id, equipment_code, equipment_name
+    </select>
+    
+    <!-- 统计设备OEE -->
+    <select id="countOEE" resultType="java.util.Map">
+        SELECT 
+            equipment_id,
+            equipment_code,
+            equipment_name,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        <if test="startTime != null and startTime != ''">
+            AND period_start_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND period_end_time <= #{endTime}
+        </if>
+        GROUP BY equipment_id, equipment_code, equipment_name
+    </select>
+    
+    <!-- 统计设备故障率 -->
+    <select id="countFailureRate" resultType="java.util.Map">
+        SELECT 
+            equipment_id,
+            equipment_code,
+            equipment_name,
+            SUM(failure_count) as total_failure_count
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        <if test="startTime != null and startTime != ''">
+            AND period_start_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND period_end_time <= #{endTime}
+        </if>
+        GROUP BY equipment_id, equipment_code, equipment_name
+    </select>
+    
+    <!-- 获取平均维修时间 -->
+    <select id="getAverageRepairTime" resultType="java.util.Map">
+        SELECT 
+            SUM(maintenance_time) / SUM(maintenance_count) as avg_repair_time
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        AND maintenance_count > 0
+    </select>
+    
+    <!-- 获取设备OEE TOP10 -->
+    <select id="getTopOEE" resultType="java.util.Map">
+        SELECT 
+            equipment_id,
+            equipment_code,
+            equipment_name,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+        GROUP BY equipment_id, equipment_code, equipment_name
+        ORDER BY avg_oee DESC
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 批量删除设备数据 -->
+    <delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM equipment_data WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 统计设备数据 -->
+    <select id="exportEquipmentData" resultType="java.util.Map">
+        SELECT 
+            id,
+            data_type,
+            period,
+            period_start_time,
+            period_end_time,
+            equipment_id,
+            equipment_code,
+            equipment_name,
+            equipment_type,
+            production_line_id,
+            work_station_id,
+            running_time,
+            idle_time,
+            stop_time,
+            maintenance_time,
+            utilization_rate,
+            availability_rate,
+            performance_rate,
+            quality_rate,
+            oee,
+            failure_count,
+            failure_time,
+            maintenance_count,
+            production_count,
+            status,
+            remark,
+            create_time,
+            update_time
+        FROM equipment_data
+        <where>
+            <if test="dataType != null and dataType != ''">
+                AND data_type = #{dataType}
+            </if>
+            <if test="period != null and period != ''">
+                AND period = #{period}
+            </if>
+            <if test="equipmentId != null">
+                AND equipment_id = #{equipmentId}
+            </if>
+            <if test="equipmentType != null and equipmentType != ''">
+                AND equipment_type = #{equipmentType}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND period_start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND period_end_time <= #{endTime}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 获取设备平均运行时间 -->
+    <select id="getAverageRunningTime" resultType="java.util.Map">
+        SELECT 
+            AVG(running_time) as avg_running_time
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+    </select>
+    
+    <!-- 获取设备平均故障次数 -->
+    <select id="getAverageFailureCount" resultType="java.util.Map">
+        SELECT 
+            AVG(failure_count) as avg_failure_count
+        FROM equipment_data
+        WHERE data_type = #{dataType}
+    </select>
+    
+    <!-- 获取今日设备运行统计 -->
+    <select id="getTodayEquipmentRunningStatistics" resultType="java.util.Map">
+        SELECT 
+            SUM(running_time) as total_running_time,
+            SUM(idle_time) as total_idle_time,
+            SUM(stop_time) as total_stop_time,
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE DATE(period_start_time) = CURDATE()
+    </select>
+    
+    <!-- 获取本周设备运行统计 -->
+    <select id="getWeekEquipmentRunningStatistics" resultType="java.util.Map">
+        SELECT 
+            SUM(running_time) as total_running_time,
+            SUM(idle_time) as total_idle_time,
+            SUM(stop_time) as total_stop_time,
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE YEARWEEK(DATE(period_start_time), 1) = YEARWEEK(CURDATE(), 1)
+    </select>
+    
+    <!-- 获取本月设备运行统计 -->
+    <select id="getMonthEquipmentRunningStatistics" resultType="java.util.Map">
+        SELECT 
+            SUM(running_time) as total_running_time,
+            SUM(idle_time) as total_idle_time,
+            SUM(stop_time) as total_stop_time,
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE MONTH(period_start_time) = MONTH(CURDATE())
+        AND YEAR(period_start_time) = YEAR(CURDATE())
+    </select>
+    
+    <!-- 获取年度设备运行统计 -->
+    <select id="getYearEquipmentRunningStatistics" resultType="java.util.Map">
+        SELECT 
+            SUM(running_time) as total_running_time,
+            SUM(idle_time) as total_idle_time,
+            SUM(stop_time) as total_stop_time,
+            AVG(utilization_rate) as avg_utilization_rate,
+            AVG(oee) as avg_oee
+        FROM equipment_data
+        WHERE YEAR(period_start_time) = YEAR(CURDATE())
+    </select>
 </mapper>

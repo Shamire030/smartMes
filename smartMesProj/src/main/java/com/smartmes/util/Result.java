@@ -59,5 +59,19 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> fail(String message) {
         return new Result<>(500, message, null);
     }
+    
+    /**
+     * 错误响应（与fail方法功能相同，保持兼容性）
+     */
+    public static <T> Result<T> error(String message) {
+        return fail(message);
+    }
+    
+    /**
+     * 错误响应（与fail方法功能相同，保持兼容性）
+     */
+    public static <T> Result<T> error(int code, String message) {
+        return fail(code, message);
+    }
 
 }
