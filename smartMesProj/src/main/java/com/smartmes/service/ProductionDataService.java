@@ -238,4 +238,88 @@ public interface ProductionDataService {
      * @return 导出数据
      */
     List<Map<String, Object>> exportProductionData(Map<String, Object> params);
+    
+    /**
+     * 根据数据类型和产品统计生产数据
+     * @param dataType 数据类型
+     * @param productId 产品ID
+     * @return 统计结果
+     */
+    Map<String, Object> countProductionByDataTypeAndProduct(String dataType, Integer productId);
+    
+    /**
+     * 根据数据类型统计各产品生产数据
+     * @param dataType 数据类型
+     * @return 产品生产数据统计列表
+     */
+    List<Map<String, Object>> countProductionByProduct(String dataType);
+    
+    /**
+     * 根据数据类型统计各设备生产数据
+     * @param dataType 数据类型
+     * @return 设备生产数据统计列表
+     */
+    List<Map<String, Object>> countProductionByEquipment(String dataType);
+    
+    /**
+     * 根据数据类型统计各生产线生产数据
+     * @param dataType 数据类型
+     * @return 生产线生产数据统计列表
+     */
+    List<Map<String, Object>> countProductionByProductionLine(String dataType);
+    
+    /**
+     * 获取产量趋势
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 产量趋势数据
+     */
+    List<Map<String, Object>> getProductionTrend(String dataType, Integer limit);
+    
+    /**
+     * 获取生产效率趋势
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 生产效率趋势数据
+     */
+    List<Map<String, Object>> getProductionEfficiencyTrend(String dataType, Integer limit);
+    
+    /**
+     * 获取产品产量趋势
+     * @param productId 产品ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 产品产量趋势数据
+     */
+    List<Map<String, Object>> getProductYieldTrend(Integer productId, String dataType, Integer limit);
+    
+    /**
+     * 获取设备产量趋势
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 设备产量趋势数据
+     */
+    List<Map<String, Object>> getEquipmentProductionTrend(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 根据设备ID查询生产数据
+     * @param equipmentId 设备ID
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByEquipmentId(Long equipmentId);
+    
+    /**
+     * 根据生产线ID查询生产数据
+     * @param productionLineId 生产线ID
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByProductionLineId(Integer productionLineId);
+    
+    /**
+     * 根据工位ID查询生产数据
+     * @param workStationId 工位ID
+     * @return 生产数据列表
+     */
+    List<ProductionData> selectByWorkStationId(Integer workStationId);
 }

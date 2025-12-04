@@ -22,7 +22,7 @@ public class EquipmentMaintenanceController {
      * 根据ID查询维护保养记录
      */
     @GetMapping("/selectById/{id}")
-    public Result selectById(@PathVariable Integer id) {
+    public Result selectById(@PathVariable Long id) {
         EquipmentMaintenance maintenance = equipmentMaintenanceService.selectById(id);
         return Result.success(maintenance);
     }
@@ -40,7 +40,7 @@ public class EquipmentMaintenanceController {
      * 根据设备ID查询维护保养记录
      */
     @GetMapping("/selectByEquipmentId/{equipmentId}")
-    public Result selectByEquipmentId(@PathVariable Integer equipmentId) {
+    public Result selectByEquipmentId(@PathVariable Long equipmentId) {
         List<EquipmentMaintenance> maintenanceList = equipmentMaintenanceService.selectByEquipmentId(equipmentId);
         return Result.success(maintenanceList);
     }
@@ -67,7 +67,7 @@ public class EquipmentMaintenanceController {
      * 根据保养负责人查询维护保养记录
      */
     @GetMapping("/selectByMaintenancePersonId/{maintenancePersonId}")
-    public Result selectByMaintenancePersonId(@PathVariable Integer maintenancePersonId) {
+    public Result selectByMaintenancePersonId(@PathVariable Long maintenancePersonId) {
         List<EquipmentMaintenance> maintenanceList = equipmentMaintenanceService.selectByMaintenancePersonId(maintenancePersonId);
         return Result.success(maintenanceList);
     }
@@ -85,7 +85,7 @@ public class EquipmentMaintenanceController {
      * 查询设备在指定时间范围内的维护保养记录
      */
     @GetMapping("/selectByEquipmentIdAndTimeRange")
-    public Result selectByEquipmentIdAndTimeRange(@RequestParam Integer equipmentId, 
+    public Result selectByEquipmentIdAndTimeRange(@RequestParam Long equipmentId, 
                                                @RequestParam String startTime, 
                                                @RequestParam String endTime) {
         List<EquipmentMaintenance> maintenanceList = equipmentMaintenanceService.selectByEquipmentIdAndTimeRange(equipmentId, startTime, endTime);
@@ -146,7 +146,7 @@ public class EquipmentMaintenanceController {
      * 删除维护保养记录
      */
     @DeleteMapping("/deleteById/{id}")
-    public Result deleteById(@PathVariable Integer id) {
+    public Result deleteById(@PathVariable Long id) {
         Integer result = equipmentMaintenanceService.deleteById(id);
         return result > 0 ? Result.success() : Result.error("删除失败");
     }
@@ -155,7 +155,7 @@ public class EquipmentMaintenanceController {
      * 更新保养状态
      */
     @PostMapping("/updateStatus/{id}/{status}")
-    public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
+    public Result updateStatus(@PathVariable Long id, @PathVariable Integer status) {
         Integer result = equipmentMaintenanceService.updateStatus(id, status);
         return result > 0 ? Result.success() : Result.error("更新失败");
     }
@@ -192,7 +192,7 @@ public class EquipmentMaintenanceController {
      */
     @GetMapping("/getEquipmentMaintenanceFrequencyStatistics")
     public Result getEquipmentMaintenanceFrequencyStatistics() {
-        Map<Integer, Integer> statistics = equipmentMaintenanceService.getEquipmentMaintenanceFrequencyStatistics();
+        Map<Long, Integer> statistics = equipmentMaintenanceService.getEquipmentMaintenanceFrequencyStatistics();
         return Result.success(statistics);
     }
     
@@ -200,33 +200,33 @@ public class EquipmentMaintenanceController {
      * 开始保养
      */
     @PostMapping("/startMaintenance/{id}")
-    public Result startMaintenance(@PathVariable Integer id, 
-                                 @RequestParam Integer operatorId, 
+    public Result startMaintenance(@PathVariable Long id, 
+                                 @RequestParam Long operatorId, 
                                  @RequestParam String operatorName) {
         Integer result = equipmentMaintenanceService.startMaintenance(id, operatorId, operatorName);
-        return result > 0 ? Result.success() : Result.error("开始保养失败");
+        return Result.success(result);
     }
     
     /**
      * 完成保养
      */
     @PostMapping("/completeMaintenance/{id}")
-    public Result completeMaintenance(@PathVariable Integer id, 
-                                    @RequestParam String maintenanceResult, 
-                                    @RequestParam String discoveredIssues, 
-                                    @RequestParam String handlingMeasures) {
+    public Result completeMaintenance(@PathVariable Long id, 
+                                     @RequestParam String maintenanceResult, 
+                                     @RequestParam String discoveredIssues, 
+                                     @RequestParam String handlingMeasures) {
         Integer result = equipmentMaintenanceService.completeMaintenance(id, maintenanceResult, discoveredIssues, handlingMeasures);
-        return result > 0 ? Result.success() : Result.error("完成保养失败");
+        return Result.success(result);
     }
     
     /**
      * 验收保养
      */
     @PostMapping("/verifyMaintenance/{id}")
-    public Result verifyMaintenance(@PathVariable Integer id, 
-                                  @RequestParam Integer verifierId, 
-                                  @RequestParam String verifierName) {
+    public Result verifyMaintenance(@PathVariable Long id, 
+                                   @RequestParam Long verifierId, 
+                                   @RequestParam String verifierName) {
         Integer result = equipmentMaintenanceService.verifyMaintenance(id, verifierId, verifierName);
-        return result > 0 ? Result.success() : Result.error("验收保养失败");
+        return Result.success(result);
     }
 }

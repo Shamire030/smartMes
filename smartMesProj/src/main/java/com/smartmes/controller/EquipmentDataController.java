@@ -49,7 +49,7 @@ public class EquipmentDataController {
      * 根据设备ID查询设备数据
      */
     @GetMapping("/by-equipment/{equipmentId}")
-    public Result<List<EquipmentData>> selectByEquipmentId(@PathVariable Integer equipmentId) {
+    public Result<List<EquipmentData>> selectByEquipmentId(@PathVariable Long equipmentId) {
         try {
             List<EquipmentData> list = equipmentDataService.selectByEquipmentId(equipmentId);
             return Result.success(list);
@@ -114,7 +114,7 @@ public class EquipmentDataController {
      * 根据设备ID和时间范围查询设备数据
      */
     @GetMapping("/by-equipment-time-range")
-    public Result<List<EquipmentData>> selectByEquipmentIdAndTimeRange(@RequestParam Integer equipmentId, @RequestParam String startTime, @RequestParam String endTime) {
+    public Result<List<EquipmentData>> selectByEquipmentIdAndTimeRange(@RequestParam Long equipmentId, @RequestParam String startTime, @RequestParam String endTime) {
         try {
             List<EquipmentData> list = equipmentDataService.selectByEquipmentIdAndTimeRange(equipmentId, startTime, endTime);
             return Result.success(list);
@@ -296,9 +296,9 @@ public class EquipmentDataController {
      * 获取设备利用率趋势
      */
     @GetMapping("/utilization-trend")
-    public Result<List<Map<String, Object>>> getUtilizationTrend(@RequestParam Integer equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
+    public Result<List<Map<String, Object>>> getUtilizationTrend(@RequestParam Long equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
         try {
-            List<Map<String, Object>> list = equipmentDataService.getUtilizationTrend(equipmentId, dataType, limit);
+            List<Map<String, Object>> list = equipmentDataService.getSingleEquipmentUtilizationTrend(equipmentId, dataType, limit);
             return Result.success(list);
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -309,9 +309,9 @@ public class EquipmentDataController {
      * 获取设备OEE趋势
      */
     @GetMapping("/oee-trend")
-    public Result<List<Map<String, Object>>> getOEEtrend(@RequestParam Integer equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
+    public Result<List<Map<String, Object>>> getOEEtrend(@RequestParam Long equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
         try {
-            List<Map<String, Object>> list = equipmentDataService.getOEEtrend(equipmentId, dataType, limit);
+            List<Map<String, Object>> list = equipmentDataService.getSingleEquipmentOEETrend(equipmentId, dataType, limit);
             return Result.success(list);
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -322,9 +322,9 @@ public class EquipmentDataController {
      * 获取设备故障率趋势
      */
     @GetMapping("/failure-rate-trend")
-    public Result<List<Map<String, Object>>> getFailureRateTrend(@RequestParam Integer equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
+    public Result<List<Map<String, Object>>> getFailureRateTrend(@RequestParam Long equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
         try {
-            List<Map<String, Object>> list = equipmentDataService.getFailureRateTrend(equipmentId, dataType, limit);
+            List<Map<String, Object>> list = equipmentDataService.getSingleEquipmentFailureRateTrend(equipmentId, dataType, limit);
             return Result.success(list);
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -413,7 +413,7 @@ public class EquipmentDataController {
      * 获取设备综合效率分析
      */
     @GetMapping("/comprehensive-efficiency-analysis")
-    public Result<Map<String, Object>> getComprehensiveEfficiencyAnalysis(@RequestParam Integer equipmentId, @RequestParam String dataType) {
+    public Result<Map<String, Object>> getComprehensiveEfficiencyAnalysis(@RequestParam Long equipmentId, @RequestParam String dataType) {
         try {
             Map<String, Object> result = equipmentDataService.getComprehensiveEfficiencyAnalysis(equipmentId, dataType);
             return Result.success(result);

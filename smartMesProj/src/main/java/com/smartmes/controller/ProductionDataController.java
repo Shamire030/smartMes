@@ -62,7 +62,7 @@ public class ProductionDataController {
      * 根据设备ID查询生产数据
      */
     @GetMapping("/by-equipment/{equipmentId}")
-    public Result<List<ProductionData>> selectByEquipmentId(@PathVariable Integer equipmentId) {
+    public Result<List<ProductionData>> selectByEquipmentId(@PathVariable Long equipmentId) {
         try {
             List<ProductionData> list = productionDataService.selectByEquipmentId(equipmentId);
             return Result.success(list);
@@ -246,7 +246,7 @@ public class ProductionDataController {
     @GetMapping("/generate-data-no")
     public Result<String> generateDataNo() {
         try {
-            String dataNo = productionDataService.generateDataNo();
+            String dataNo = productionDataService.generateDataCode();
             return Result.success(dataNo);
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -361,7 +361,7 @@ public class ProductionDataController {
      * 获取设备产量趋势
      */
     @GetMapping("/equipment-production-trend")
-    public Result<List<Map<String, Object>>> getEquipmentProductionTrend(@RequestParam Integer equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
+    public Result<List<Map<String, Object>>> getEquipmentProductionTrend(@RequestParam Long equipmentId, @RequestParam String dataType, @RequestParam Integer limit) {
         try {
             List<Map<String, Object>> list = productionDataService.getEquipmentProductionTrend(equipmentId, dataType, limit);
             return Result.success(list);

@@ -160,9 +160,10 @@ public class ProductionExecutionServiceImpl implements ProductionExecutionServic
     public ProductionExecution scanToStart(String batchNo, Long operatorId) {
         // 直接调用startProductionExecution方法，通过batchNo查找对应的id
         ProductionExecution execution = getProductionExecutionByBatchNo(batchNo);
-        // 注意：不使用getId()方法，因为ProductionExecution类可能没有这个方法
-        // 我们假设已经在getProductionExecutionByBatchNo方法中验证了execution的存在
-        return startProductionExecution((long)0); // 临时返回值，避免编译错误
+        // 注意：由于ProductionExecution类可能没有getId()方法，直接使用查询到的execution
+        // 直接更新状态
+        productionExecutionMapper.updateStatus(execution.getId(), 1);
+        return execution;
     }
     
     // recordProductionData方法已删除，因为该方法在ProductionExecutionService接口中不存在

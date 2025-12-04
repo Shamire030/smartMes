@@ -22,7 +22,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     private EquipmentMaintenanceMapper equipmentMaintenanceMapper;
     
     @Override
-    public EquipmentMaintenance selectById(Integer id) {
+    public EquipmentMaintenance selectById(Long id) {
         return equipmentMaintenanceMapper.selectById(id);
     }
     
@@ -32,7 +32,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     }
     
     @Override
-    public List<EquipmentMaintenance> selectByEquipmentId(Integer equipmentId) {
+    public List<EquipmentMaintenance> selectByEquipmentId(Long equipmentId) {
         return equipmentMaintenanceMapper.selectByEquipmentId(equipmentId);
     }
     
@@ -47,7 +47,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     }
     
     @Override
-    public List<EquipmentMaintenance> selectByMaintenancePersonId(Integer maintenancePersonId) {
+    public List<EquipmentMaintenance> selectByMaintenancePersonId(Long maintenancePersonId) {
         return equipmentMaintenanceMapper.selectByMaintenancePersonId(maintenancePersonId);
     }
     
@@ -57,7 +57,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     }
     
     @Override
-    public List<EquipmentMaintenance> selectByEquipmentIdAndTimeRange(Integer equipmentId, String startTime, String endTime) {
+    public List<EquipmentMaintenance> selectByEquipmentIdAndTimeRange(Long equipmentId, String startTime, String endTime) {
         return equipmentMaintenanceMapper.selectByEquipmentIdAndTimeRange(equipmentId, startTime, endTime);
     }
     
@@ -108,7 +108,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     
     @Transactional
     @Override
-    public Integer deleteById(Integer id) {
+    public Integer deleteById(Long id) {
         // 检查保养记录状态，只有待执行状态可以删除
         EquipmentMaintenance maintenance = equipmentMaintenanceMapper.selectById(id);
         if (maintenance != null && maintenance.getStatus() != 0) {
@@ -119,7 +119,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     
     @Transactional
     @Override
-    public Integer updateStatus(Integer id, Integer status) {
+    public Integer updateStatus(Long id, Integer status) {
         // 状态流转控制
         EquipmentMaintenance maintenance = equipmentMaintenanceMapper.selectById(id);
         if (maintenance == null) {
@@ -131,25 +131,25 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     
     @Transactional
     @Override
-    public Integer updateActualStartTime(Integer id, String actualStartTime) {
+    public Integer updateActualStartTime(Long id, String actualStartTime) {
         return equipmentMaintenanceMapper.updateActualStartTime(id, actualStartTime);
     }
     
     @Transactional
     @Override
-    public Integer updateActualEndTime(Integer id, String actualEndTime) {
+    public Integer updateActualEndTime(Long id, String actualEndTime) {
         return equipmentMaintenanceMapper.updateActualEndTime(id, actualEndTime);
     }
     
     @Transactional
     @Override
-    public Integer updateMaintenanceResult(Integer id, String maintenanceResult, String discoveredIssues, String handlingMeasures) {
+    public Integer updateMaintenanceResult(Long id, String maintenanceResult, String discoveredIssues, String handlingMeasures) {
         return equipmentMaintenanceMapper.updateMaintenanceResult(id, maintenanceResult, discoveredIssues, handlingMeasures);
     }
     
     @Transactional
     @Override
-    public Integer updateVerification(Integer id, Integer verifierId, String verifierName, String verifyTime) {
+    public Integer updateVerification(Long id, Long verifierId, String verifierName, String verifyTime) {
         return equipmentMaintenanceMapper.updateVerification(id, verifierId, verifierName, verifyTime);
     }
     
@@ -162,11 +162,11 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
         
         // 查询当日最大序号
         String maxCode = equipmentMaintenanceMapper.selectMaxCodeByPrefix(prefix);
-        Integer sequence = 1;
+        Long sequence = 1L;
         
         if (maxCode != null && maxCode.length() >= 14) {
             try {
-                sequence = Integer.parseInt(maxCode.substring(10)) + 1;
+                sequence = Long.parseLong(maxCode.substring(10)) + 1;
             } catch (NumberFormatException e) {
                 // 异常处理，默认使用1
             }
@@ -182,8 +182,8 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
         // 统计各状态保养记录数量
         List<Map<String, Object>> list = equipmentMaintenanceMapper.countByStatus();
         for (Map<String, Object> map : list) {
-            Integer status = (Integer) map.get("status");
-            Integer count = (Integer) map.get("count");
+            Integer status = ((Number) map.get("status")).intValue();
+            Integer count = ((Number) map.get("count")).intValue();
             statistics.put("status_" + status, count);
         }
         return statistics;
@@ -196,20 +196,20 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
         List<Map<String, Object>> list = equipmentMaintenanceMapper.countByType();
         for (Map<String, Object> map : list) {
             String type = (String) map.get("maintenance_type");
-            Integer count = (Integer) map.get("count");
+            Integer count = ((Number) map.get("count")).intValue();
             statistics.put(type, count);
         }
         return statistics;
     }
     
     @Override
-    public Map<Integer, Integer> getEquipmentMaintenanceFrequencyStatistics() {
-        Map<Integer, Integer> statistics = new HashMap<>();
+    public Map<Long, Integer> getEquipmentMaintenanceFrequencyStatistics() {
+        Map<Long, Integer> statistics = new HashMap<>();
         // 统计各设备保养频次
         List<Map<String, Object>> list = equipmentMaintenanceMapper.countByEquipment();
         for (Map<String, Object> map : list) {
-            Integer equipmentId = (Integer) map.get("equipment_id");
-            Integer count = (Integer) map.get("count");
+            Long equipmentId = ((Number) map.get("equipment_id")).longValue();
+            Integer count = ((Number) map.get("count")).intValue();
             statistics.put(equipmentId, count);
         }
         return statistics;
@@ -217,7 +217,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     
     @Transactional
     @Override
-    public Integer startMaintenance(Integer id, Integer operatorId, String operatorName) {
+    public Integer startMaintenance(Long id, Long operatorId, String operatorName) {
         // 检查保养记录状态
         EquipmentMaintenance maintenance = equipmentMaintenanceMapper.selectById(id);
         if (maintenance == null || maintenance.getStatus() != 0) {
@@ -231,7 +231,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
     
     @Transactional
     @Override
-    public Integer completeMaintenance(Integer id, String maintenanceResult, String discoveredIssues, String handlingMeasures) {
+    public Integer completeMaintenance(Long id, String maintenanceResult, String discoveredIssues, String handlingMeasures) {
         // 检查保养记录状态
         EquipmentMaintenance maintenance = equipmentMaintenanceMapper.selectById(id);
         if (maintenance == null) {
@@ -239,16 +239,16 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
         }
         
         // 更新保养结果
-        equipmentMaintenanceMapper.updateMaintenanceResult((long)id, maintenanceResult, discoveredIssues, handlingMeasures);
+        equipmentMaintenanceMapper.updateMaintenanceResult(id, maintenanceResult, discoveredIssues, handlingMeasures);
         
         // 更新实际结束时间和状态
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        return equipmentMaintenanceMapper.updateActualEndTime((long)id, now);
+        return equipmentMaintenanceMapper.updateActualEndTime(id, now);
     }
     
     @Transactional
     @Override
-    public Integer verifyMaintenance(Integer id, Integer verifierId, String verifierName) {
+    public Integer verifyMaintenance(Long id, Long verifierId, String verifierName) {
         // 检查保养记录状态
         EquipmentMaintenance maintenance = equipmentMaintenanceMapper.selectById(id);
         if (maintenance == null) {
@@ -256,7 +256,7 @@ public class EquipmentMaintenanceServiceImpl implements EquipmentMaintenanceServ
         }
         
         // 更新验收信息
-        Date now = new Date();
-        return equipmentMaintenanceMapper.updateVerification((long)id, (long)verifierId, verifierName, now);
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        return equipmentMaintenanceMapper.updateVerification(id, verifierId, verifierName, now);
     }
 }

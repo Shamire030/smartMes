@@ -4,6 +4,7 @@ import com.smartmes.model.EquipmentMaintenance;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Date;
 
 /**
@@ -39,7 +40,7 @@ public interface EquipmentMaintenanceMapper {
      * @param maintenanceType 保养类型
      * @return 维护保养记录对象列表
      */
-    List<EquipmentMaintenance> selectByMaintenanceType(Integer maintenanceType);
+    List<EquipmentMaintenance> selectByMaintenanceType(String maintenanceType);
     
     /**
      * 根据保养状态查询维护保养记录
@@ -61,7 +62,7 @@ public interface EquipmentMaintenanceMapper {
      * @param endTime 结束时间
      * @return 维护保养记录对象列表
      */
-    List<EquipmentMaintenance> selectByTimeRange(Date startTime, Date endTime);
+    List<EquipmentMaintenance> selectByTimeRange(String startTime, String endTime);
     
     /**
      * 查询设备在指定时间范围内的维护保养记录
@@ -70,7 +71,7 @@ public interface EquipmentMaintenanceMapper {
      * @param endTime 结束时间
      * @return 维护保养记录对象列表
      */
-    List<EquipmentMaintenance> selectByEquipmentIdAndTimeRange(Long equipmentId, Date startTime, Date endTime);
+    List<EquipmentMaintenance> selectByEquipmentIdAndTimeRange(Long equipmentId, String startTime, String endTime);
     
     /**
      * 分页查询维护保养记录
@@ -120,7 +121,7 @@ public interface EquipmentMaintenanceMapper {
      * @param actualStartTime 实际开始时间
      * @return 更新行数
      */
-    int updateActualStartTime(Long id, Date actualStartTime);
+    int updateActualStartTime(Long id, String actualStartTime);
     
     /**
      * 更新实际结束时间
@@ -128,7 +129,7 @@ public interface EquipmentMaintenanceMapper {
      * @param actualEndTime 实际结束时间
      * @return 更新行数
      */
-    int updateActualEndTime(Long id, Date actualEndTime);
+    int updateActualEndTime(Long id, String actualEndTime);
     
     /**
      * 更新保养结果
@@ -138,7 +139,7 @@ public interface EquipmentMaintenanceMapper {
      * @param handlingMeasures 处理措施
      * @return 更新行数
      */
-    int updateMaintenanceResult(Long id, Integer maintenanceResult, String discoveredIssues, String handlingMeasures);
+    int updateMaintenanceResult(Long id, String maintenanceResult, String discoveredIssues, String handlingMeasures);
     
     /**
      * 更新验收信息
@@ -148,7 +149,7 @@ public interface EquipmentMaintenanceMapper {
      * @param verifyTime 验收时间
      * @return 更新行数
      */
-    int updateVerification(Long id, Long verifierId, String verifierName, Date verifyTime);
+    int updateVerification(Long id, Long verifierId, String verifierName, String verifyTime);
     
     /**
      * 删除维护保养记录
@@ -156,4 +157,22 @@ public interface EquipmentMaintenanceMapper {
      * @return 删除行数
      */
     int deleteById(Long id);
+    
+    /**
+     * 按设备统计维护保养次数
+     * @return 设备ID和保养次数的映射
+     */
+    List<Map<String, Object>> countByEquipment();
+    
+    /**
+     * 按状态统计维护保养记录
+     * @return 状态和记录数的映射
+     */
+    List<Map<String, Object>> countByStatus();
+    
+    /**
+     * 按类型统计维护保养记录
+     * @return 类型和记录数的映射
+     */
+    List<Map<String, Object>> countByType();
 }

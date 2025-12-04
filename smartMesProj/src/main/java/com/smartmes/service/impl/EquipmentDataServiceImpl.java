@@ -32,7 +32,7 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     }
     
     @Override
-    public List<EquipmentData> selectByEquipmentId(Integer equipmentId) {
+    public List<EquipmentData> selectByEquipmentId(Long equipmentId) {
         return equipmentDataMapper.selectByEquipmentId(equipmentId);
     }
     
@@ -52,7 +52,7 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     }
     
     @Override
-    public List<EquipmentData> selectByResponsiblePersonId(Integer responsiblePersonId) {
+    public List<EquipmentData> selectByResponsiblePersonId(Long responsiblePersonId) {
         return equipmentDataMapper.selectByResponsiblePersonId(responsiblePersonId);
     }
     
@@ -67,7 +67,7 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     }
     
     @Override
-    public List<EquipmentData> selectByEquipmentIdAndTimeRange(Integer equipmentId, String startTime, String endTime) {
+    public List<EquipmentData> selectByEquipmentIdAndTimeRange(Long equipmentId, String startTime, String endTime) {
         return equipmentDataMapper.selectByEquipmentIdAndTimeRange(equipmentId, startTime, endTime);
     }
     
@@ -165,7 +165,7 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     }
     
     @Override
-    public Map<String, Object> countEquipmentDataByDataTypeAndEquipment(String dataType, Integer equipmentId) {
+    public Map<String, Object> countEquipmentDataByDataTypeAndEquipment(String dataType, Long equipmentId) {
         return equipmentDataMapper.countEquipmentDataByDataTypeAndEquipment(dataType, equipmentId);
     }
     
@@ -235,13 +235,33 @@ public class EquipmentDataServiceImpl implements EquipmentDataService {
     }
     
     @Override
-    public List<Map<String, Object>> getSingleEquipmentUtilizationTrend(Integer equipmentId, String dataType, Integer limit) {
+    public List<Map<String, Object>> getSingleEquipmentUtilizationTrend(Long equipmentId, String dataType, Integer limit) {
         return equipmentDataMapper.getSingleEquipmentUtilizationTrend(equipmentId, dataType, limit);
     }
     
     @Override
-    public List<Map<String, Object>> getSingleEquipmentOEETrend(Integer equipmentId, String dataType, Integer limit) {
+    public List<Map<String, Object>> getSingleEquipmentOEETrend(Long equipmentId, String dataType, Integer limit) {
         return equipmentDataMapper.getSingleEquipmentOEETrend(equipmentId, dataType, limit);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getSingleEquipmentFailureRateTrend(Long equipmentId, String dataType, Integer limit) {
+        return equipmentDataMapper.getSingleEquipmentFailureRateTrend(equipmentId, dataType, limit);
+    }
+    
+    @Override
+    public Map<String, Object> getComprehensiveEfficiencyAnalysis(Long equipmentId, String dataType) {
+        return equipmentDataMapper.getComprehensiveEfficiencyAnalysis(equipmentId, dataType);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getEfficiencyComparisonByType(String dataType) {
+        return equipmentDataMapper.getEfficiencyComparisonByType(dataType);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getEfficiencyComparisonByProductionLine(String dataType) {
+        return equipmentDataMapper.getEfficiencyComparisonByProductionLine(dataType);
     }
     
     @Override

@@ -31,7 +31,7 @@ public interface EquipmentDataMapper {
      * @param equipmentId 设备ID
      * @return 设备数据列表
      */
-    List<EquipmentData> selectByEquipmentId(Integer equipmentId);
+    List<EquipmentData> selectByEquipmentId(Long equipmentId);
     
     /**
      * 根据设备类型查询设备数据
@@ -52,7 +52,7 @@ public interface EquipmentDataMapper {
      * @param workStationId 工位ID
      * @return 设备数据列表
      */
-    List<EquipmentData> selectByWorkStationId(Integer workStationId);
+    List<EquipmentData> selectByWorkStationId(Long workStationId);
     
     /**
      * 根据时间范围查询设备数据
@@ -69,7 +69,7 @@ public interface EquipmentDataMapper {
      * @param endTime 结束时间
      * @return 设备数据列表
      */
-    List<EquipmentData> selectByEquipmentIdAndTimeRange(Integer equipmentId, String startTime, String endTime);
+    List<EquipmentData> selectByEquipmentIdAndTimeRange(Long equipmentId, String startTime, String endTime);
     
     /**
      * 根据数据类型查询设备数据列表
@@ -139,7 +139,7 @@ public interface EquipmentDataMapper {
      * @param equipmentId 设备ID
      * @return 统计结果
      */
-    Map<String, Object> countEquipmentByDataTypeAndEquipment(String dataType, Integer equipmentId);
+    Map<String, Object> countEquipmentByDataTypeAndEquipment(String dataType, Long equipmentId);
     
     /**
      * 根据数据类型统计各设备类型数据
@@ -207,5 +207,54 @@ public interface EquipmentDataMapper {
      * @param limit 限制数量
      * @return 设备数据趋势
      */
-    List<Map<String, Object>> getEquipmentDataTrendByEquipment(Integer equipmentId, String dataType, Integer limit);
+    List<Map<String, Object>> getEquipmentDataTrendByEquipment(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 获取单设备利用率趋势分析
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 单设备利用率趋势分析
+     */
+    List<Map<String, Object>> getSingleEquipmentUtilizationTrend(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 获取单设备OEE趋势分析
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 单设备OEE趋势分析
+     */
+    List<Map<String, Object>> getSingleEquipmentOEETrend(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 获取单设备故障率趋势分析
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @param limit 限制数量
+     * @return 单设备故障率趋势分析
+     */
+    List<Map<String, Object>> getSingleEquipmentFailureRateTrend(Long equipmentId, String dataType, Integer limit);
+    
+    /**
+     * 获取设备综合效率分析
+     * @param equipmentId 设备ID
+     * @param dataType 数据类型
+     * @return 设备综合效率分析结果
+     */
+    Map<String, Object> getComprehensiveEfficiencyAnalysis(Long equipmentId, String dataType);
+    
+    /**
+     * 获取设备类型效率对比
+     * @param dataType 数据类型
+     * @return 设备类型效率对比结果
+     */
+    List<Map<String, Object>> getEfficiencyComparisonByType(String dataType);
+    
+    /**
+     * 获取生产线设备效率对比
+     * @param dataType 数据类型
+     * @return 生产线设备效率对比结果
+     */
+    List<Map<String, Object>> getEfficiencyComparisonByProductionLine(String dataType);
 }

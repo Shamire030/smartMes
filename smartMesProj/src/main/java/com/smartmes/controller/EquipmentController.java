@@ -22,7 +22,7 @@ public class EquipmentController {
      * 根据ID查询设备信息
      */
     @GetMapping("/selectById/{id}")
-    public Result selectById(@PathVariable Integer id) {
+    public Result selectById(@PathVariable Long id) {
         Equipment equipment = equipmentService.selectById(id);
         return Result.success(equipment);
     }
@@ -76,7 +76,7 @@ public class EquipmentController {
      * 根据负责人查询设备信息
      */
     @GetMapping("/selectByResponsiblePersonId/{responsiblePersonId}")
-    public Result selectByResponsiblePersonId(@PathVariable Integer responsiblePersonId) {
+    public Result selectByResponsiblePersonId(@PathVariable Long responsiblePersonId) {
         List<Equipment> equipmentList = equipmentService.selectByResponsiblePersonId(responsiblePersonId);
         return Result.success(equipmentList);
     }
@@ -144,7 +144,7 @@ public class EquipmentController {
      * 删除设备信息
      */
     @DeleteMapping("/deleteById/{id}")
-    public Result deleteById(@PathVariable Integer id) {
+    public Result deleteById(@PathVariable Long id) {
         Integer result = equipmentService.deleteById(id);
         return result > 0 ? Result.success() : Result.error("删除失败");
     }
@@ -153,7 +153,7 @@ public class EquipmentController {
      * 更新设备状态
      */
     @PostMapping("/updateStatus/{id}/{status}")
-    public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
+    public Result updateStatus(@PathVariable Long id, @PathVariable Integer status) {
         Integer result = equipmentService.updateStatus(id, status);
         return result > 0 ? Result.success() : Result.error("更新失败");
     }
@@ -162,7 +162,7 @@ public class EquipmentController {
      * 更新设备在线状态
      */
     @PostMapping("/updateOnlineStatus/{id}/{onlineStatus}")
-    public Result updateOnlineStatus(@PathVariable Integer id, @PathVariable Integer onlineStatus) {
+    public Result updateOnlineStatus(@PathVariable Long id, @PathVariable Integer onlineStatus) {
         Integer result = equipmentService.updateOnlineStatus(id, onlineStatus);
         return result > 0 ? Result.success() : Result.error("更新失败");
     }
@@ -171,7 +171,7 @@ public class EquipmentController {
      * 更新设备运行时间
      */
     @PostMapping("/updateRuntime/{id}/{runtime}")
-    public Result updateRuntime(@PathVariable Integer id, @PathVariable Integer runtime) {
+    public Result updateRuntime(@PathVariable Long id, @PathVariable Integer runtime) {
         Integer result = equipmentService.updateRuntime(id, runtime);
         return result > 0 ? Result.success() : Result.error("更新失败");
     }
@@ -180,8 +180,8 @@ public class EquipmentController {
      * 更新设备责任人
      */
     @PostMapping("/updateResponsiblePerson")
-    public Result updateResponsiblePerson(@RequestParam Integer id, 
-                                        @RequestParam Integer responsiblePersonId, 
+    public Result updateResponsiblePerson(@RequestParam Long id, 
+                                        @RequestParam Long responsiblePersonId, 
                                         @RequestParam String responsiblePersonName) {
         Integer result = equipmentService.updateResponsiblePerson(id, responsiblePersonId, responsiblePersonName);
         return result > 0 ? Result.success() : Result.error("更新失败");
