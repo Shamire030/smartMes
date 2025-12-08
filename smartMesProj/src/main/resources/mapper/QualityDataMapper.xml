@@ -72,15 +72,15 @@
     <!-- 根据时间范围查询质量数据 -->
     <select id="selectByTimeRange" resultMap="QualityDataResultMap">
         SELECT * FROM quality_data 
-        WHERE inspection_time >= #{startTime} AND inspection_time <= #{endTime}
+        WHERE inspection_time &gt;= #{startTime} AND inspection_time &lt;= #{endTime}
     </select>
     
     <!-- 根据产品ID和时间范围查询质量数据 -->
     <select id="selectByProductIdAndTimeRange" resultMap="QualityDataResultMap">
         SELECT * FROM quality_data 
         WHERE product_id = #{productId} 
-        AND inspection_time >= #{startTime} 
-        AND inspection_time <= #{endTime}
+        AND inspection_time &gt;= #{startTime} 
+        AND inspection_time &lt;= #{endTime}
     </select>
     
     <!-- 根据数据类型查询质量数据列表 -->
@@ -129,10 +129,10 @@
                 AND operator_id = #{operatorId}
             </if>
             <if test="startTime != null and startTime != ''">
-                AND inspection_time >= #{startTime}
+                AND inspection_time &gt;= #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                AND inspection_time <= #{endTime}
+                AND inspection_time &lt;= #{endTime}
             </if>
             <if test="status != null and status != ''">
                 AND status = #{status}

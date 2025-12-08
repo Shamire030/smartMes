@@ -116,7 +116,7 @@
     </update>
     
     <!-- 更新状态 -->
-    <update id="updateStatus">
+    <update id="updateStatus" parameterType="map">
         UPDATE production_plan SET
             status = #{status},
             update_time = #{updateTime}
