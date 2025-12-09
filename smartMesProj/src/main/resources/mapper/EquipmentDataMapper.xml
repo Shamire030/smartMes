@@ -67,15 +67,15 @@
     <!-- 根据时间范围查询设备数据 -->
     <select id="selectByTimeRange" resultMap="EquipmentDataResultMap">
         SELECT * FROM equipment_data 
-        WHERE period_start_time >= #{startTime} AND period_end_time <= #{endTime}
+        WHERE period_start_time &gt;= #{startTime} AND period_end_time &lt;= #{endTime}
     </select>
     
     <!-- 根据设备ID和时间范围查询设备数据 -->
     <select id="selectByEquipmentIdAndTimeRange" resultMap="EquipmentDataResultMap">
         SELECT * FROM equipment_data 
         WHERE equipment_id = #{equipmentId} 
-        AND period_start_time >= #{startTime} 
-        AND period_end_time <= #{endTime}
+        AND period_start_time &gt;= #{startTime} 
+        AND period_end_time &lt;= #{endTime}
     </select>
     
     <!-- 根据数据类型查询设备数据列表 -->
@@ -121,10 +121,10 @@
                 AND work_station_id = #{workStationId}
             </if>
             <if test="startTime != null and startTime != ''">
-                AND period_start_time >= #{startTime}
+                AND period_start_time &gt;= #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                AND period_end_time <= #{endTime}
+                AND period_end_time &lt;= #{endTime}
             </if>
             <if test="status != null and status != ''">
                 AND status = #{status}
@@ -463,10 +463,10 @@
         FROM equipment_data
         WHERE data_type = #{dataType}
         <if test="startTime != null and startTime != ''">
-            AND period_start_time >= #{startTime}
+            AND period_start_time &gt;= #{startTime}
         </if>
         <if test="endTime != null and endTime != ''">
-            AND period_end_time <= #{endTime}
+            AND period_end_time &lt;= #{endTime}
         </if>
         GROUP BY equipment_id, equipment_code, equipment_name
     </select>
@@ -481,10 +481,10 @@
         FROM equipment_data
         WHERE data_type = #{dataType}
         <if test="startTime != null and startTime != ''">
-            AND period_start_time >= #{startTime}
+            AND period_start_time &gt;= #{startTime}
         </if>
         <if test="endTime != null and endTime != ''">
-            AND period_end_time <= #{endTime}
+            AND period_end_time &lt;= #{endTime}
         </if>
         GROUP BY equipment_id, equipment_code, equipment_name
     </select>
@@ -499,10 +499,10 @@
         FROM equipment_data
         WHERE data_type = #{dataType}
         <if test="startTime != null and startTime != ''">
-            AND period_start_time >= #{startTime}
+            AND period_start_time &gt;= #{startTime}
         </if>
         <if test="endTime != null and endTime != ''">
-            AND period_end_time <= #{endTime}
+            AND period_end_time &lt;= #{endTime}
         </if>
         GROUP BY equipment_id, equipment_code, equipment_name
     </select>
@@ -584,10 +584,10 @@
                 AND equipment_type = #{equipmentType}
             </if>
             <if test="startTime != null and startTime != ''">
-                AND period_start_time >= #{startTime}
+                AND period_start_time &gt;= #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                AND period_end_time <= #{endTime}
+                AND period_end_time &lt;= #{endTime}
             </if>
         </where>
     </select>

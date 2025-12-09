@@ -60,15 +60,15 @@
     <!-- 根据时间范围查询生产数据 -->
     <select id="selectByTimeRange" resultMap="ProductionDataResultMap">
         SELECT * FROM production_data 
-        WHERE period_start_time >= #{startTime} AND period_end_time <= #{endTime}
+        WHERE period_start_time &gt;= #{startTime} AND period_end_time &lt;= #{endTime}
     </select>
     
     <!-- 根据产品ID和时间范围查询生产数据 -->
     <select id="selectByProductIdAndTimeRange" resultMap="ProductionDataResultMap">
         SELECT * FROM production_data 
         WHERE product_id = #{productId} 
-        AND period_start_time >= #{startTime} 
-        AND period_end_time <= #{endTime}
+        AND period_start_time &gt;= #{startTime} 
+        AND period_end_time &lt;= #{endTime}
     </select>
     
     <!-- 根据数据类型查询生产数据列表 -->
@@ -111,10 +111,10 @@
                 AND shift = #{shift}
             </if>
             <if test="startTime != null and startTime != ''">
-                AND period_start_time >= #{startTime}
+                AND period_start_time &gt;= #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                AND period_end_time <= #{endTime}
+                AND period_end_time &lt;= #{endTime}
             </if>
         </where>
     </select>

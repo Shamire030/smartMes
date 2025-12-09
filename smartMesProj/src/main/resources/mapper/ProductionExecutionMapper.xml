@@ -58,7 +58,7 @@
     <!-- 根据时间范围查询 -->
     <select id="selectByTimeRange" resultMap="ProductionExecutionResultMap">
         SELECT * FROM production_execution 
-        WHERE start_time >= #{startTime} AND start_time <= #{endTime}
+        WHERE start_time &gt;= #{startTime} AND start_time &lt;= #{endTime}
     </select>
     
     <!-- 查询所有 -->
