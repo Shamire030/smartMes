@@ -137,6 +137,7 @@ const loadFromLocalStorage = () => {
       name: '系统管理员', 
       code: 'admin', 
       description: '拥有系统全部权限', 
+      permissions: [1, 11, 12, 13, 14, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53],
       createdAt: '2025-01-01 00:00:00', 
       updatedAt: '2025-01-01 00:00:00' 
     },
@@ -145,6 +146,7 @@ const loadFromLocalStorage = () => {
       name: '生产管理员', 
       code: 'production_manager', 
       description: '管理生产相关功能', 
+      permissions: [2, 21, 22, 23, 5, 51],
       createdAt: '2025-01-01 00:00:00', 
       updatedAt: '2025-01-01 00:00:00' 
     },
@@ -153,6 +155,7 @@ const loadFromLocalStorage = () => {
       name: '质量管理员', 
       code: 'quality_manager', 
       description: '管理质量相关功能', 
+      permissions: [3, 31, 32, 33, 5, 52],
       createdAt: '2025-01-01 00:00:00', 
       updatedAt: '2025-01-01 00:00:00' 
     },
@@ -161,6 +164,7 @@ const loadFromLocalStorage = () => {
       name: '设备管理员', 
       code: 'equipment_manager', 
       description: '管理设备相关功能', 
+      permissions: [4, 41, 42, 43, 5, 53],
       createdAt: '2025-01-01 00:00:00', 
       updatedAt: '2025-01-01 00:00:00' 
     },
@@ -169,6 +173,7 @@ const loadFromLocalStorage = () => {
       name: '普通用户', 
       code: 'user', 
       description: '拥有基础操作权限', 
+      permissions: [5, 51, 52, 53],
       createdAt: '2025-01-01 00:00:00', 
       updatedAt: '2025-01-01 00:00:00' 
     }
@@ -192,11 +197,13 @@ const total = ref(roles.value.length)
 // 对话框
 const dialogVisible = ref(false)
 const dialogTitle = ref('新增角色')
+// 表单数据
 const formData = reactive({
   id: '',
   name: '',
   code: '',
-  description: ''
+  description: '',
+  permissions: []
 })
 
 // 权限设置
@@ -360,6 +367,7 @@ const handleSubmit = () => {
     const newRole = {
       ...formData,
       id: Date.now(), // 生成唯一ID
+      permissions: [], // 初始权限为空
       createdAt: now,
       updatedAt: now
     }
@@ -387,8 +395,8 @@ const handlePermissions = (row) => {
   }
   
   selectedRole.value = row
-  // 这里可以根据角色获取实际的权限
-  defaultCheckedKeys.value = [1, 11, 12, 2, 21, 22]
+  // 根据角色获取实际的权限
+  defaultCheckedKeys.value = row.permissions || []
   permissionsVisible.value = true
 }
 
@@ -400,7 +408,26 @@ const handlePermissionCheck = (data, checked) => {
 
 // 保存权限
 const handleSavePermissions = () => {
-  // 模拟保存权限
+  if (!selectedRole.value) return
+  
+  // 保存权限到角色数据
+  selectedRole.value.permissions = defaultCheckedKeys.value
+  
+  // 更新原始数据中的角色
+  const index = originalRoles.value.findIndex(r => r.id === selectedRole.value.id)
+  if (index !== -1) {
+    originalRoles.value[index] = { ...selectedRole.value }
+  }
+  
+  // 更新表格数据中的角色
+  const tableIndex = roles.value.findIndex(r => r.id === selectedRole.value.id)
+  if (tableIndex !== -1) {
+    roles.value[tableIndex] = { ...selectedRole.value }
+  }
+  
+  // 保存到本地存储
+  syncToLocalStorage()
+  
   permissionsVisible.value = false
   ElMessage.success('权限保存成功')
 }
