@@ -43,6 +43,14 @@
               <el-button type="primary" size="small" @click="handleDetails(scope.row)">
                 详情
               </el-button>
+              <el-button 
+                v-if="authStore.hasPermission('edit', 'equipment')"
+                type="success" 
+                size="small" 
+                @click="handleEdit(scope.row)"
+              >
+                编辑
+              </el-button>
               <el-button type="warning" size="small" @click="handleMaintenance(scope.row)">
                 维护记录
               </el-button>
@@ -52,32 +60,34 @@
       </el-tab-pane>
       
       <el-tab-pane label="设备状态监控" name="monitoring">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <el-card v-for="equipment in equipmentList" :key="equipment.id" class="monitor-card">
-            <template #header>
-              <div class="flex justify-between items-center">
-                <span>{{ equipment.name }}</span>
-                <el-tag :type="getStatusType(equipment.status)">
-                  {{ getStatusText(equipment.status) }}
-                </el-tag>
-              </div>
-            </template>
-            <div class="text-center">
-              <div class="text-3xl font-bold mb-2">{{ equipment.currentTemperature }}°C</div>
-              <div class="text-gray-600 mb-4">当前温度</div>
-              <div class="flex justify-between">
-                <div>
-                  <div class="text-sm text-gray-500">运行时间</div>
-                  <div class="font-medium">{{ equipment.runningHours }}小时</div>
+        <el-row :gutter="20">
+          <el-col :xs="24" :sm="12" :md="8" v-for="equipment in equipmentList" :key="equipment.id">
+            <el-card class="monitor-card">
+              <template #header>
+                <div class="flex justify-between items-center">
+                  <span>{{ equipment.name }}</span>
+                  <el-tag :type="getStatusType(equipment.status)">
+                    {{ getStatusText(equipment.status) }}
+                  </el-tag>
                 </div>
-                <div>
-                  <div class="text-sm text-gray-500">产量</div>
-                  <div class="font-medium">{{ equipment.productionCount }}件</div>
+              </template>
+              <div class="text-center">
+                <div class="text-3xl font-bold mb-2">{{ equipment.currentTemperature }}°C</div>
+                <div class="text-gray-600 mb-4">当前温度</div>
+                <div class="flex justify-between">
+                  <div>
+                    <div class="text-sm text-gray-500">运行时间</div>
+                    <div class="font-medium">{{ equipment.runningHours }}小时</div>
+                  </div>
+                  <div>
+                    <div class="text-sm text-gray-500">产量</div>
+                    <div class="font-medium">{{ equipment.productionCount }}件</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </el-card>
-        </div>
+            </el-card>
+          </el-col>
+        </el-row>
       </el-tab-pane>
     </el-tabs>
     
@@ -123,6 +133,112 @@
       
       <template #footer>
         <el-button @click="maintenanceVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
+    
+    <!-- 编辑对话框 -->
+    <el-dialog
+      v-model="editVisible"
+      title="编辑设备"
+      width="800px"
+    >
+      <el-form :model="editForm" label-width="100px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="设备编号" disabled>
+              <el-input v-model="editForm.id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="设备名称">
+              <el-input v-model="editForm.name" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="设备类型">
+              <el-input v-model="editForm.type" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-select v-model="editForm.status">
+                <el-option label="运行中" value="running" />
+                <el-option label="待机" value="idle" />
+                <el-option label="维护中" value="maintenance" />
+                <el-option label="故障" value="fault" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="设备位置">
+              <el-input v-model="editForm.location" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="制造商">
+              <el-input v-model="editForm.manufacturer" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="购买日期">
+              <el-date-picker
+                v-model="editForm.purchaseDate"
+                type="date"
+                format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="上次维护日期">
+              <el-date-picker
+                v-model="editForm.lastMaintenanceDate"
+                type="date"
+                format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="当前温度">
+              <el-input-number v-model="editForm.currentTemperature" :min="-20" :max="100" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="运行时间">
+              <el-input-number v-model="editForm.runningHours" :min="0" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="产量">
+              <el-input-number v-model="editForm.productionCount" :min="0" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        
+        <el-form-item label="备注">
+          <el-input v-model="editForm.remarks" type="textarea" :rows="3" />
+        </el-form-item>
+      </el-form>
+      
+      <template #footer>
+        <el-button @click="editVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSaveEdit">保存</el-button>
       </template>
     </el-dialog>
   </div>
@@ -255,6 +371,23 @@ const syncToLocalStorage = () => {
 const detailsVisible = ref(false)
 const selectedRow = ref(null)
 
+// 编辑对话框
+const editVisible = ref(false)
+const editForm = ref({
+  id: '',
+  name: '',
+  type: '',
+  status: '',
+  location: '',
+  manufacturer: '',
+  purchaseDate: '',
+  lastMaintenanceDate: '',
+  currentTemperature: 0,
+  runningHours: 0,
+  productionCount: 0,
+  remarks: ''
+})
+
 // 状态映射
 const statusMap = {
   running: { text: '运行中', type: 'success' },
@@ -328,6 +461,30 @@ const handleAdd = () => {
 const handleDetails = (row) => {
   selectedRow.value = row
   detailsVisible.value = true
+}
+
+// 编辑
+const handleEdit = (row) => {
+  // 复制行数据到编辑表单
+  editForm.value = { ...row }
+  editVisible.value = true
+}
+
+// 保存编辑
+const handleSaveEdit = () => {
+  // 找到要编辑的设备在列表中的索引
+  const index = equipmentList.value.findIndex(equipment => equipment.id === editForm.value.id)
+  if (index !== -1) {
+    // 更新设备列表
+    equipmentList.value[index] = { ...editForm.value }
+    // 同步到本地存储
+    syncToLocalStorage()
+    // 关闭对话框
+    editVisible.value = false
+    ElMessage.success('设备编辑成功')
+  } else {
+    ElMessage.error('设备编辑失败，未找到设备')
+  }
 }
 
 // 维护记录

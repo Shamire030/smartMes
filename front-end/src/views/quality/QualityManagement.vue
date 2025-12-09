@@ -40,6 +40,14 @@
               <el-button type="primary" size="small" @click="handleInspectionDetails(scope.row)">
                 详情
               </el-button>
+              <el-button 
+                v-if="authStore.hasPermission('edit', 'quality')"
+                type="success" 
+                size="small" 
+                @click="handleEditInspection(scope.row)"
+              >
+                编辑
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -110,6 +118,53 @@
       
       <template #footer>
         <el-button @click="detailsVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
+    
+    <!-- 编辑检查记录对话框 -->
+    <el-dialog
+      v-model="editVisible"
+      title="编辑检查记录"
+      width="600px"
+    >
+      <el-form :model="editForm" label-width="100px">
+        <el-form-item label="检查编号" disabled>
+          <el-input v-model="editForm.id" />
+        </el-form-item>
+        <el-form-item label="工单编号">
+          <el-input v-model="editForm.workOrderId" />
+        </el-form-item>
+        <el-form-item label="产品名称">
+          <el-input v-model="editForm.productName" />
+        </el-form-item>
+        <el-form-item label="检查日期">
+          <el-date-picker
+            v-model="editForm.inspectionDate"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+          />
+        </el-form-item>
+        <el-form-item label="检验员">
+          <el-input v-model="editForm.inspector" />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="editForm.status">
+            <el-option label="合格" value="pass" />
+            <el-option label="不合格" value="fail" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="缺陷数量">
+          <el-input-number v-model="editForm.defectCount" :min="0" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="editForm.remarks" type="textarea" :rows="3" />
+        </el-form-item>
+      </el-form>
+      
+      <template #footer>
+        <el-button @click="editVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSaveEdit">保存</el-button>
       </template>
     </el-dialog>
   </div>
@@ -208,6 +263,19 @@ const detailsVisible = ref(false)
 const detailsTitle = ref('详情')
 const selectedRow = ref(null)
 
+// 编辑对话框
+const editVisible = ref(false)
+const editForm = ref({
+  id: '',
+  workOrderId: '',
+  productName: '',
+  inspectionDate: '',
+  inspector: '',
+  status: 'pass',
+  defectCount: 0,
+  remarks: ''
+})
+
 // 处理方式映射
 const dispositionMap = {
   rework: { text: '返工', type: 'warning' },
@@ -269,6 +337,30 @@ const handleInspectionDetails = (row) => {
   detailsTitle.value = '质量检查详情'
   selectedRow.value = row
   detailsVisible.value = true
+}
+
+// 编辑检查记录
+const handleEditInspection = (row) => {
+  // 复制行数据到编辑表单
+  editForm.value = { ...row }
+  editVisible.value = true
+}
+
+// 保存编辑
+const handleSaveEdit = () => {
+  // 找到要编辑的检查记录在列表中的索引
+  const index = inspectionRecords.value.findIndex(record => record.id === editForm.value.id)
+  if (index !== -1) {
+    // 更新检查记录列表
+    inspectionRecords.value[index] = { ...editForm.value }
+    // 同步到本地存储
+    syncToLocalStorage()
+    // 关闭对话框
+    editVisible.value = false
+    ElMessage.success('检查记录编辑成功')
+  } else {
+    ElMessage.error('检查记录编辑失败，未找到记录')
+  }
 }
 
 // 不合格品搜索

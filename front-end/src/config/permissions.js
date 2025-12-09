@@ -60,6 +60,9 @@ export const PERMISSION_CONFIG = {
     // 系统管理
     system: {
       view: ['admin', 'super_admin'],
+      create: ['super_admin'],
+      edit: ['super_admin'],
+      delete: ['super_admin'],
       user_manage: ['super_admin'],
       role_manage: ['super_admin'],
       system_config: ['super_admin']
