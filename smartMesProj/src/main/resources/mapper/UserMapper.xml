@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 指定对应的Mapper接口 -->
+<mapper namespace="com.smartmes.mapper.UserMapper">
+    
+    <!-- 定义结果集映射 -->
+    <resultMap id="UserResultMap" type="com.smartmes.model.User">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="role" column="role" />
+        <result property="departmentId" column="department_id" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="status" column="status" />
+    </resultMap>
+    
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" resultMap="UserResultMap">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+    
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUsername" resultMap="UserResultMap">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+    
+    <!-- 查询所有用户 -->
+    <select id="selectAll" resultMap="UserResultMap">
+        SELECT * FROM user
+    </select>
+    
+    <!-- 插入用户 -->
+    <insert id="insert" parameterType="com.smartmes.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (
+            username, 
+            password, 
+            role, 
+            department_id, 
+            create_time, 
+            update_time, 
+            status
+        ) VALUES (
+            #{username}, 
+            #{password}, 
+            #{role}, 
+            #{departmentId}, 
+            #{createTime}, 
+            #{updateTime}, 
+            #{status}
+        )
+    </insert>
+    
+    <!-- 更新用户 -->
+    <update id="update" parameterType="com.smartmes.model.User">
+        UPDATE user SET
+            username = #{username},
+            password = #{password},
+            role = #{role},
+            department_id = #{departmentId},
+            update_time = #{updateTime},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除用户 -->
+    <delete id="deleteById">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+    
+    <!-- 批量删除用户 -->
+    <delete id="deleteBatch">
+        DELETE FROM user WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

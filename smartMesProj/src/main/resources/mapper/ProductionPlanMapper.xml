@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartmes.mapper.ProductionPlanMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="ProductionPlanResultMap" type="com.smartmes.model.ProductionPlan">
+        <id property="id" column="id"/>
+        <result property="planCode" column="plan_code"/>
+        <result property="planName" column="plan_name"/>
+        <result property="productId" column="product_id"/>
+        <result property="planQuantity" column="plan_quantity"/>
+        <result property="completedQuantity" column="completed_quantity"/>
+        <result property="planStartTime" column="plan_start_time"/>
+        <result property="planEndTime" column="plan_end_time"/>
+        <result property="actualStartTime" column="actual_start_time"/>
+        <result property="actualEndTime" column="actual_end_time"/>
+        <result property="status" column="status"/>
+        <result property="responsiblePerson" column="responsible_person"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="erpOrderCode" column="erp_order_code"/>
+    </resultMap>
+    
+    <!-- 根据ID查询 -->
+    <select id="findById" parameterType="java.lang.Long" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan WHERE id = #{id}
+    </select>
+    
+    <!-- 根据计划编号查询 -->
+    <select id="findByPlanCode" parameterType="java.lang.String" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan WHERE plan_code = #{planCode}
+    </select>
+    
+    <!-- 查询所有 -->
+    <select id="findAll" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan
+    </select>
+    
+    <!-- 根据产品ID查询 -->
+    <select id="findByProductId" parameterType="java.lang.Long" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan WHERE product_id = #{productId}
+    </select>
+    
+    <!-- 根据状态查询 -->
+    <select id="findByStatus" parameterType="java.lang.Integer" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan WHERE status = #{status}
+    </select>
+    
+    <!-- 根据时间范围查询 -->
+    <select id="findByPlanStartTimeBetween" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan 
+        WHERE plan_start_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+    
+    <!-- 根据ERP订单号查询 -->
+    <select id="findByErpOrderCode" parameterType="java.lang.String" resultMap="ProductionPlanResultMap">
+        SELECT * FROM production_plan WHERE erp_order_code = #{erpOrderCode}
+    </select>
+    
+    <!-- 新增 -->
+    <insert id="insert" parameterType="com.smartmes.model.ProductionPlan" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO production_plan(
+            plan_code,
+            plan_name,
+            product_id,
+            plan_quantity,
+            completed_quantity,
+            plan_start_time,
+            plan_end_time,
+            actual_start_time,
+            actual_end_time,
+            status,
+            responsible_person,
+            remark,
+            create_time,
+            update_time,
+            erp_order_code
+        ) VALUES (
+            #{planCode},
+            #{planName},
+            #{productId},
+            #{planQuantity},
+            #{completedQuantity},
+            #{planStartTime},
+            #{planEndTime},
+            #{actualStartTime},
+            #{actualEndTime},
+            #{status},
+            #{responsiblePerson},
+            #{remark},
+            #{createTime},
+            #{updateTime},
+            #{erpOrderCode}
+        )
+    </insert>
+    
+    <!-- 更新 -->
+    <update id="update" parameterType="com.smartmes.model.ProductionPlan">
+        UPDATE production_plan SET
+            plan_code = #{planCode},
+            plan_name = #{planName},
+            product_id = #{productId},
+            plan_quantity = #{planQuantity},
+            completed_quantity = #{completedQuantity},
+            plan_start_time = #{planStartTime},
+            plan_end_time = #{planEndTime},
+            actual_start_time = #{actualStartTime},
+            actual_end_time = #{actualEndTime},
+            status = #{status},
+            responsible_person = #{responsiblePerson},
+            remark = #{remark},
+            update_time = #{updateTime},
+            erp_order_code = #{erpOrderCode}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 更新状态 -->
+    <update id="updateStatus" parameterType="map">
+        UPDATE production_plan SET
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM production_plan WHERE id = #{id}
+    </delete>
+    
+</mapper>
