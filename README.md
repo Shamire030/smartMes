@@ -1,4 +1,4 @@
-# Smart MES - 智能制造执行系统
+# Smart MES - 智能制造执行系统（原型！）
 
 [![Build Status](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/Shamire030/smartMes)
 
