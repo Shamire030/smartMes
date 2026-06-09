@@ -1,7 +1,6 @@
 # Smart MES - 智能制造执行系统
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/yourusername/smartmes)
+[![Build Status](https://img.shields.io/badge/build-passing-green.svg)](https://github.com/Shamire030/smartMes)
 
 Smart MES 是一款基于现代信息技术的智能制造执行系统，旨在帮助制造企业实现生产过程的数字化、可视化和智能化管理。
 
@@ -161,15 +160,9 @@ http://localhost:8081/smartmes/swagger-ui.html
 
 ---
 
-## 📄 许可证
-
-本项目采用 MIT 许可证，详见 [LICENSE](LICENSE) 文件。
-
----
-
-## 📞 联系方式
+##  联系方式
 
 好吧这只是一个实训项目，除非你真的很需要或者想找个游戏搭子：
 
 - QQ：2397498718
-- GitHub Issues：https://github.com/yourusername/smartmes/issues
+- GitHub Issues：https://github.com/Shamire030/smartMes/issues
